@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>আমার ব্যক্তিগত ওয়েবসাইট</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background: white;
+            padding: 50px;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body onload="welcomeMessage()">
+
+    <div class="container">
+        <h1>আমার ওয়েবসাইটে আপনাকে স্বাগতম!</h1>
+        <p>এটি একটি সাধারণ HTML ওয়েবসাইট।</p>
+    </div>
+
+    <script>
+        function welcomeMessage() {
+            alert("আপনাকে স্বাগতম!");
+        }
+    </script>
+
+</body>
+</html>
