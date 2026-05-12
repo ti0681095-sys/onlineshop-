@@ -3,231 +3,334 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ShopBD - অনলাইন শপ</title>
+    <title>Online Market - ShopBD</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', sans-serif; background: #f8f9fa; color: #333; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #ffffff;
+            color: #333;
+        }
 
-        /* Navbar */
-        nav {
-            background: #fff;
+        /* Top Bar */
+        .top-bar {
+            background: white;
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 15px 0;
+            padding: 12px 15px;
             position: sticky;
             top: 0;
             z-index: 100;
-        }
-        .nav-container {
-            max-width: 1200px;
-            margin: 0 auto;
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 0 20px;
+            gap: 12px;
         }
-        .logo { font-size: 28px; font-weight: bold; color: #e74c3c; }
-        .search-bar {
-            flex: 1;
-            max-width: 500px;
-            margin: 0 20px;
-        }
-        .search-bar input {
+        .menu-btn { font-size: 28px; color: #FF6600; cursor: pointer; }
+        .search-box { flex: 1; }
+        .search-box input {
             width: 100%;
-            padding: 12px;
-            border: 1px solid #ddd;
+            padding: 14px 20px;
+            border: 2px solid #FF6600;
             border-radius: 50px;
             font-size: 16px;
+            outline: none;
         }
-        .nav-icons a {
-            margin-left: 20px;
-            font-size: 22px;
-            color: #333;
-            text-decoration: none;
-        }
+        .cart-icon { font-size: 26px; color: #FF6600; cursor: pointer; }
 
-        /* Hero */
-        .hero {
-            background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url('https://source.unsplash.com/random/1600x600/?shopping') center/cover;
-            height: 500px;
+        .online-market {
+            background: #FF6600;
+            color: white;
+            padding: 12px 15px;
             display: flex;
             align-items: center;
-            color: white;
-            text-align: center;
+            gap: 12px;
+            font-size: 18px;
+            font-weight: bold;
         }
-        .hero-content {
-            max-width: 700px;
-            margin: 0 auto;
-        }
-        .hero h1 { font-size: 3.5rem; margin-bottom: 15px; }
-        .hero p { font-size: 1.3rem; margin-bottom: 25px; }
 
-        /* Products */
-        .container { max-width: 1200px; margin: 30px auto; padding: 0 20px; }
-        h2 { text-align: center; margin: 30px 0; font-size: 2.2rem; }
-        .products {
+        /* Product Grid */
+        .product-grid {
+            padding: 15px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
+            grid-template-columns: repeat(auto-fit, minmax(175px, 1fr));
+            gap: 18px;
         }
         .product-card {
             background: white;
-            border-radius: 12px;
+            border-radius: 15px;
             overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
-            transition: 0.3s;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+            transition: 0.4s;
         }
         .product-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 25px rgba(0,0,0,0.15);
+            transform: translateY(-12px);
+            box-shadow: 0 15px 30px rgba(255,102,0,0.2);
         }
         .product-card img {
             width: 100%;
-            height: 220px;
+            height: 190px;
             object-fit: cover;
         }
         .product-info {
-            padding: 15px;
+            padding: 14px;
         }
-        .product-info h3 { font-size: 1.2rem; margin: 8px 0; }
+        .product-info h3 {
+            font-size: 15.5px;
+            margin: 8px 0 6px;
+            line-height: 1.3;
+        }
         .price {
-            color: #e74c3c;
-            font-size: 1.4rem;
+            color: #FF6600;
+            font-size: 18px;
             font-weight: bold;
         }
-        .add-to-cart {
-            width: 100%;
-            padding: 12px;
-            background: #e74c3c;
-            color: white;
+        .btn-group {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .btn {
+            flex: 1;
+            padding: 11px 0;
             border: none;
-            border-radius: 8px;
-            margin-top: 10px;
-            font-size: 16px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-details {
+            background: #f0f0f0;
+            color: #333;
+        }
+        .btn-cart {
+            background: #FF6600;
+            color: white;
+        }
+        .btn:hover { opacity: 0.9; transform: scale(1.03); }
+
+        /* No Product Message */
+        .no-product {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+            font-size: 18px;
+        }
+        .no-product h3 {
+            color: #FF6600;
+            margin-bottom: 10px;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #FF6600;
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 6px;
+            box-shadow: 0 -3px 12px rgba(0,0,0,0.2);
+            z-index: 200;
+        }
+        .nav-item {
+            text-align: center;
+            color: white;
+            font-size: 12px;
             cursor: pointer;
         }
-        .add-to-cart:hover { background: #c0392b; }
+        .nav-item span { font-size: 26px; display: block; margin-bottom: 2px; }
 
-        /* Footer */
-        footer {
-            background: #222;
-            color: #ddd;
-            padding: 50px 20px 20px;
-            margin-top: 50px;
+        /* Modals */
+        .modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 300;
         }
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 30px;
+        .modal-content {
+            background: white;
+            width: 90%;
+            max-width: 420px;
+            border-radius: 15px;
+            padding: 20px;
+            max-height: 90vh;
+            overflow-y: auto;
         }
     </style>
 </head>
 <body>
 
-    <!-- Navbar -->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">ShopBD</div>
-            <div class="search-bar">
-                <input type="text" placeholder="পণ্য খুঁজুন...">
-            </div>
-            <div class="nav-icons">
-                <a href="#">🛒</a>
-                <a href="#">❤️</a>
-                <a href="#">👤</a>
-            </div>
+    <!-- Top Bar -->
+    <div class="top-bar">
+        <div class="menu-btn" onclick="toggleMenu()">☰</div>
+        <div class="search-box">
+            <input type="text" id="searchInput" placeholder="পণ্য খুঁজুন...">
         </div>
-    </nav>
+        <div class="cart-icon" onclick="alert('কার্ট খুলছে...')">🛒</div>
+    </div>
 
-    <!-- Hero Banner -->
-    <section class="hero">
-        <div class="hero-content">
-            <h1>ঈদের অফার চলছে!</h1>
-            <p>সেরা পণ্য সেরা দামে কিনুন</p>
-            <button onclick="alert('স্বাগতম ShopBD-এ!')" style="padding:15px 40px; font-size:18px; background:#e74c3c; color:white; border:none; border-radius:50px; cursor:pointer;">
-                এখনই কেনাকাটা করুন
-            </button>
+    <!-- Online Market -->
+    <div class="online-market">
+        🛍️ Online Market
+    </div>
+
+    <!-- Products Section -->
+    <div id="productContainer">
+        <div class="product-grid" id="productGrid"></div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+        <div class="nav-item" onclick="showHome()">
+            <span>🏠</span> HOME
         </div>
-    </section>
-
-    <!-- Featured Products -->
-    <div class="container">
-        <h2>ফিচার্ড প্রোডাক্টস</h2>
-        <div class="products">
-
-            <!-- Product 1 -->
-            <div class="product-card">
-                <img src="https://source.unsplash.com/random/300x300/?tshirt" alt="টি-শার্ট">
-                <div class="product-info">
-                    <h3>মেনস কটন টি-শার্ট</h3>
-                    <p class="price">৳ ৫৯৯</p>
-                    <button class="add-to-cart" onclick="addToCart(this)">কার্টে যোগ করুন</button>
-                </div>
-            </div>
-
-            <!-- Product 2 -->
-            <div class="product-card">
-                <img src="https://source.unsplash.com/random/300x300/?headphone" alt="হেডফোন">
-                <div class="product-info">
-                    <h3>ওয়্যারলেস হেডফোন</h3>
-                    <p class="price">৳ ১,২৯৯</p>
-                    <button class="add-to-cart" onclick="addToCart(this)">কার্টে যোগ করুন</button>
-                </div>
-            </div>
-
-            <!-- Product 3 -->
-            <div class="product-card">
-                <img src="https://source.unsplash.com/random/300x300/?watch" alt="ঘড়ি">
-                <div class="product-info">
-                    <h3>স্মার্ট ওয়াচ</h3>
-                    <p class="price">৳ ২,৪৯৯</p>
-                    <button class="add-to-cart" onclick="addToCart(this)">কার্টে যোগ করুন</button>
-                </div>
-            </div>
-
-            <!-- Product 4 -->
-            <div class="product-card">
-                <img src="https://source.unsplash.com/random/300x300/?sneakers" alt="জুতা">
-                <div class="product-info">
-                    <h3>স্পোর্টস স্নিকার্স</h3>
-                    <p class="price">৳ ১,৮৯৯</p>
-                    <button class="add-to-cart" onclick="addToCart(this)">কার্টে যোগ করুন</button>
-                </div>
-            </div>
-
+        <div class="nav-item" onclick="showAllProducts()">
+            <span>🛍️</span> BUY
+        </div>
+        <div class="nav-item" onclick="alert('কার্ট খুলছে')">
+            <span>🛒</span> CART
+        </div>
+        <div class="nav-item" onclick="alert('অ্যাকাউন্ট')">
+            <span>👤</span> ACCOUNT
         </div>
     </div>
 
-    <!-- Footer -->
-    <footer>
-        <div class="footer-content">
-            <div>
-                <h3>ShopBD</h3>
-                <p>বাংলাদেশের সেরা অনলাইন শপিং প্ল্যাটফর্ম</p>
-            </div>
-            <div>
-                <h4>কুইক লিংক</h4>
-                <p>হোম • প্রোডাক্ট • অফার • ট্র্যাক অর্ডার</p>
-            </div>
-            <div>
-                <h4>যোগাযোগ</h4>
-                <p>ইমেইল: support@shopbd.com</p>
-                <p>ফোন: ০১৭XXXXXXXX</p>
-            </div>
+    <!-- Menu Modal -->
+    <div class="modal" id="menuModal">
+        <div class="modal-content">
+            <h3 style="color:#FF6600; text-align:center; margin-bottom:15px;">মেনু</h3>
+            <a href="#" style="display:block; padding:12px; color:#333; text-decoration:none;" onclick="alert('Account খুলছে')">👤 Account</a>
+            <a href="#" style="display:block; padding:12px; color:#333; text-decoration:none;" onclick="alert('Buy পেজ')">🛍️ Buy</a>
+            <a href="#" style="display:block; padding:12px; color:#333; text-decoration:none;" onclick="alert('Cart খুলছে')">🛒 Cart</a>
+            <a href="#" style="display:block; padding:12px; color:#333; text-decoration:none;" onclick="alert('Support')">❓ Support</a>
+            <a href="#" style="display:block; padding:12px; color:#333; text-decoration:none;" onclick="alert('Details')">📋 Details</a>
+            <button onclick="toggleMenu()" style="width:100%; margin-top:20px; padding:12px; background:#FF6600; color:white; border:none; border-radius:10px;">BACK</button>
         </div>
-        <p style="text-align:center; margin-top:40px; opacity:0.7;">© ২০২৬ ShopBD - সব অধিকার সংরক্ষিত</p>
-    </footer>
+    </div>
+
+    <!-- Admin Login & Panel (আগের মতোই আছে) -->
+    <div class="modal" id="adminLoginModal">
+        <div class="modal-content">
+            <h2 style="text-align:center; color:#FF6600;">Admin Login</h2>
+            <input type="password" id="adminPass" placeholder="পাসওয়ার্ড দিন" style="width:100%; padding:12px; margin:15px 0; border-radius:10px; border:1px solid #ccc;">
+            <button onclick="checkAdminPass()" style="width:100%; padding:12px; background:#FF6600; color:white; border:none; border-radius:10px;">Login</button>
+            <button onclick="closeAllModals()" style="width:100%; margin-top:10px; padding:12px; background:#ddd;">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <div class="modal" id="adminPanelModal">
+        <div class="modal-content">
+            <h2 style="color:#FF6600; text-align:center;">Admin Panel</h2>
+            <button onclick="changePassword()" style="width:100%; padding:12px; margin:8px 0; background:#333; color:white; border:none; border-radius:10px;">Change Password</button>
+            <button onclick="showAddProductForm()" style="width:100%; padding:12px; margin:8px 0; background:#FF6600; color:white; border:none; border-radius:10px;">Ad Post</button>
+            <button onclick="showEditDelete()" style="width:100%; padding:12px; margin:8px 0; background:#333; color:white; border:none; border-radius:10px;">Edit / Delete Post</button>
+            <button onclick="alert('Top Product Ad ফর্ম খুলছে...')" style="width:100%; padding:12px; margin:8px 0; background:#FF6600; color:white; border:none; border-radius:10px;">Top Product Ad</button>
+            <button onclick="alert('View Order খুলছে...')" style="width:100%; padding:12px; margin:8px 0; background:#333; color:white; border:none; border-radius:10px;">View Order</button>
+            <button onclick="closeAllModals()" style="width:100%; padding:12px; margin-top:15px; background:#ddd;">বন্ধ করুন</button>
+        </div>
+    </div>
 
     <script>
+        let products = [
+            // এখানে প্রোডাক্ট খালি রাখলে টেস্ট করতে পারবেন
+            // { id:1, name: "কটন পোলো টি-শার্ট", price: "৳ ৭৯৯", img: "https://source.unsplash.com/random/300x300/?tshirt" }
+        ];
+
+        function renderProducts() {
+            const container = document.getElementById('productGrid');
+            container.innerHTML = '';
+
+            if (products.length === 0) {
+                container.innerHTML = `
+                    <div class="no-product">
+                        <h3>😔</h3>
+                        <p><strong>This product is currently unavailable.</strong></p>
+                        <p style="margin-top:10px; font-size:15px;">আমরা শীঘ্রই নতুন প্রোডাক্ট যোগ করব।</p>
+                    </div>
+                `;
+                return;
+            }
+
+            products.forEach(p => {
+                const div = document.createElement('div');
+                div.className = 'product-card';
+                div.innerHTML = `
+                    <img src="\( {p.img}" alt=" \){p.name}">
+                    <div class="product-info">
+                        <h3>${p.name}</h3>
+                        <p class="price">${p.price}</p>
+                        <div class="btn-group">
+                            <button class="btn btn-details" onclick="showDetails('\( {p.name}', ' \){p.price}')">Details</button>
+                            <button class="btn btn-cart" onclick="addToCart(this)">Add to Cart</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function showDetails(name, price) {
+            alert(`প্রোডাক্ট: ${name}\nদাম: ${price}\n\nবিস্তারিত তথ্য এখানে দেখানো হবে।`);
+        }
+
         function addToCart(btn) {
-            btn.innerHTML = "✅ যোগ হয়েছে";
+            btn.innerHTML = "✅ Added";
             btn.style.background = "#27ae60";
             setTimeout(() => {
-                btn.innerHTML = "কার্টে যোগ করুন";
-                btn.style.background = "#e74c3c";
-            }, 2000);
+                btn.innerHTML = "Add to Cart";
+                btn.style.background = "#FF6600";
+            }, 1800);
         }
+
+        // Search for Admin
+        document.getElementById('searchInput').addEventListener('input', function() {
+            if (this.value.toLowerCase() === 'adminpenal') {
+                document.getElementById('adminLoginModal').style.display = 'flex';
+                this.value = '';
+            }
+        });
+
+        function checkAdminPass() {
+            if (document.getElementById('adminPass').value === "tamim31") {
+                closeAllModals();
+                document.getElementById('adminPanelModal').style.display = 'flex';
+            } else {
+                alert("ভুল পাসওয়ার্ড!");
+            }
+        }
+
+        function showAddProductForm() {
+            const name = prompt("প্রোডাক্টের নাম দিন:");
+            if (!name) return;
+            const price = prompt("দাম দিন:");
+            if (!price) return;
+            const img = prompt("ছবির লিংক দিন:");
+
+            products.push({
+                id: Date.now(),
+                name: name,
+                price: "৳ " + price,
+                img: img || "https://source.unsplash.com/random/300x300/?product"
+            });
+            renderProducts();
+            alert("✅ প্রোডাক্ট আপলোড হয়েছে!");
+        }
+
+        function toggleMenu() { document.getElementById('menuModal').style.display = 'flex'; }
+        function closeAllModals() {
+            document.querySelectorAll('.modal').forEach(m => m.style.display = 'none');
+        }
+        function showHome() { alert("হোম পেজে ফিরে এসেছেন"); }
+        function showAllProducts() {
+            document.getElementById('productGrid').scrollIntoView({ behavior: "smooth" });
+        }
+
+        // Initialize
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
