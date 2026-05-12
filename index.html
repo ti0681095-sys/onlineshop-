@@ -1,85 +1,151 @@
-<!-- FULL NEW MODERN ECOMMERCE WEBSITE -->
-<!-- OLD index.html DELETE করে এইটা PASTE করো -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>Online Market</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neo Market</title>
 
 <link rel="stylesheet"
 href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
 <style>
 
-*{
-margin:0;
-padding:0;
-box-sizing:border-box;
-font-family:Arial,sans-serif;
-}
-
 body{
-background:white;
-padding-bottom:100px;
+margin:0;
+font-family:Arial;
+background:#f4f6fb;
 }
 
-/* HEADER */
-
-header{
-position:sticky;
-top:0;
-z-index:999;
-background:white;
-padding:15px;
+/* TOP BAR */
+.topbar{
 display:flex;
 align-items:center;
-gap:12px;
-border-bottom:1px solid #eee;
+gap:10px;
+padding:12px;
+background:white;
+position:sticky;
+top:0;
+z-index:1000;
+box-shadow:0 2px 10px rgba(0,0,0,0.05);
 }
 
-.menu-btn{
-font-size:28px;
+.menuBtn{
+font-size:24px;
 color:orange;
 cursor:pointer;
 }
 
-.search-box{
-display:flex;
-align-items:center;
+.search{
 flex:1;
-background:#f3f4f6;
-border-radius:12px;
+display:flex;
+background:#eee;
+border-radius:10px;
 overflow:hidden;
 }
 
-.search-box input{
-width:100%;
+.search input{
+flex:1;
 border:none;
+padding:10px;
 outline:none;
-padding:12px;
-background:transparent;
-font-size:16px;
 }
 
-.search-box button{
+.search button{
 border:none;
 background:orange;
 color:white;
-padding:12px 16px;
-font-size:18px;
+padding:10px 14px;
+cursor:pointer;
 }
 
-.top-cart{
-font-size:26px;
+/* MARKET HEADER */
+.market{
+margin:15px;
+background:orange;
+color:white;
+padding:15px;
+border-radius:12px;
+display:flex;
+align-items:center;
+gap:10px;
+font-size:22px;
+}
+
+/* PRODUCTS */
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+gap:12px;
+padding:15px;
+}
+
+.card{
+background:white;
+border-radius:15px;
+overflow:hidden;
+box-shadow:0 5px 15px rgba(0,0,0,0.08);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-5px);
+}
+
+.card img{
+width:100%;
+height:140px;
+object-fit:cover;
+}
+
+.card-body{
+padding:10px;
+}
+
+.price{
 color:orange;
+font-weight:bold;
 }
 
-/* SIDE MENU */
+.btn{
+width:100%;
+padding:8px;
+border:none;
+margin-top:6px;
+border-radius:8px;
+cursor:pointer;
+font-weight:bold;
+}
 
+.buy{background:orange;color:white;}
+.cart{background:black;color:white;}
+.details{background:#eee;}
+
+/* DETAILS PAGE */
+.detailsPage{
+display:none;
+padding:15px;
+}
+
+.detailsPage img{
+width:100%;
+border-radius:12px;
+}
+
+.detailsPage h2{
+margin-top:10px;
+}
+
+.backBtn{
+margin-top:10px;
+width:100%;
+padding:10px;
+border:none;
+background:orange;
+color:white;
+border-radius:10px;
+}
+
+/* MENU */
 .menu{
 position:fixed;
 top:0;
@@ -88,248 +154,58 @@ width:250px;
 height:100%;
 background:white;
 box-shadow:0 0 15px rgba(0,0,0,0.2);
-padding:20px;
+padding:15px;
 transition:0.3s;
-z-index:5000;
+z-index:2000;
 }
 
-.menu.active{
-left:0;
-}
-
-.menu h2{
-margin-bottom:20px;
-color:orange;
-}
+.menu.active{left:0;}
 
 .menu a{
 display:block;
-padding:14px;
+padding:12px;
+background:#f2f2f2;
+margin-bottom:8px;
 text-decoration:none;
 color:black;
-margin-bottom:10px;
-border-radius:10px;
-background:#f3f4f6;
+border-radius:8px;
 }
 
-.back-btn{
-width:100%;
-padding:12px;
-border:none;
+.close{
 background:black;
 color:white;
-border-radius:10px;
+width:100%;
+padding:10px;
+border:none;
 margin-top:10px;
-}
-
-/* MARKET */
-
-.market-box{
-margin:20px;
-background:orange;
-color:white;
-padding:18px;
-border-radius:18px;
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-.market-box i{
-font-size:35px;
-}
-
-.market-box h2{
-font-size:28px;
-}
-
-/* SECTION */
-
-.section-title{
-padding:0 20px;
-font-size:30px;
-font-weight:bold;
-margin-bottom:15px;
-}
-
-/* TOP LIST */
-
-.slider{
-display:flex;
-overflow-x:auto;
-padding:0 20px 20px;
-gap:15px;
-}
-
-.slider::-webkit-scrollbar{
-display:none;
-}
-
-.no-product{
-min-width:260px;
-padding:30px;
-background:#f3f4f6;
-border-radius:20px;
-text-align:center;
-font-size:20px;
-}
-
-/* PRODUCTS */
-
-.products{
-padding:20px;
-display:grid;
-grid-template-columns:
-repeat(auto-fit,minmax(180px,1fr));
-gap:20px;
-}
-
-.card{
-background:white;
-border-radius:20px;
-overflow:hidden;
-box-shadow:0 5px 15px rgba(0,0,0,0.1);
-}
-
-.card img{
-width:100%;
-height:180px;
-object-fit:cover;
-}
-
-.card-content{
-padding:15px;
-}
-
-.card-content h3{
-margin-bottom:10px;
-font-size:20px;
-}
-
-.price{
-color:orange;
-font-size:22px;
-font-weight:bold;
-margin-bottom:12px;
-}
-
-.btn-group{
-display:flex;
-flex-direction:column;
-gap:10px;
-}
-
-.buy-btn,
-.cart-btn,
-.details-btn{
-border:none;
-padding:12px;
-border-radius:12px;
-font-weight:bold;
-cursor:pointer;
-}
-
-.buy-btn{
-background:orange;
-color:white;
-}
-
-.cart-btn{
-background:black;
-color:white;
-}
-
-.details-btn{
-background:#f3f4f6;
+border-radius:8px;
 }
 
 /* ADMIN */
-
-.admin-btn{
+.adminBtn{
 display:none;
-margin:20px;
-width:calc(100% - 40px);
+margin:10px 15px;
+padding:10px;
+background:orange;
+color:white;
+border:none;
+border-radius:10px;
+width:calc(100% - 30px);
+}
+
+.adminPanel{
+display:none;
 padding:15px;
+}
+
+.adminPanel button{
+width:100%;
+padding:12px;
+margin-bottom:10px;
 border:none;
 background:orange;
 color:white;
-border-radius:12px;
-font-size:18px;
-}
-
-.admin-panel{
-display:none;
-padding:20px;
-}
-
-.admin-panel button{
-width:100%;
-padding:15px;
-margin-bottom:15px;
-border:none;
-background:orange;
-color:white;
-border-radius:12px;
-font-size:17px;
-}
-
-/* DETAILS PAGE */
-
-.details-page{
-display:none;
-padding:20px;
-}
-
-.details-page img{
-width:100%;
-border-radius:20px;
-margin-bottom:20px;
-}
-
-.details-page h2{
-margin-bottom:15px;
-}
-
-.details-page p{
-font-size:18px;
-margin-bottom:20px;
-}
-
-.details-back{
-padding:14px;
-width:100%;
-border:none;
-background:orange;
-color:white;
-border-radius:12px;
-font-size:18px;
-}
-
-/* BOTTOM NAV */
-
-.bottom-nav{
-position:fixed;
-bottom:0;
-left:0;
-width:100%;
-background:orange;
-display:flex;
-justify-content:space-around;
-padding:12px 0;
-z-index:999;
-}
-
-.nav-item{
-display:flex;
-flex-direction:column;
-align-items:center;
-color:white;
-font-size:14px;
-}
-
-.nav-item i{
-font-size:22px;
-margin-bottom:5px;
+border-radius:10px;
 }
 
 </style>
@@ -338,561 +214,167 @@ margin-bottom:5px;
 <body>
 
 <!-- MENU -->
-
-<div class="menu"
-id="menu">
-
-<h2>Menu</h2>
-
+<div class="menu" id="menu">
+<h3>Menu</h3>
 <a href="#">Account</a>
 <a href="#">Buy</a>
 <a href="#">Cart</a>
 <a href="#">Support</a>
-<a href="#">Details</a>
-
-<button class="back-btn"
-onclick="closeMenu()">
-BACK
-</button>
-
+<button class="close" onclick="closeMenu()">BACK</button>
 </div>
 
-<!-- HEADER -->
+<!-- TOP BAR -->
+<div class="topbar">
 
-<header>
-
-<div class="menu-btn"
-onclick="openMenu()">
-
+<div class="menuBtn" onclick="openMenu()">
 <i class="fas fa-bars"></i>
-
 </div>
 
-<div class="search-box">
-
-<input type="text"
-id="searchInput"
-placeholder="Search products..."
-oninput="checkAdmin()">
-
+<div class="search">
+<input id="search" oninput="checkAdmin()" placeholder="Search product">
 <button onclick="searchProduct()">
-
 <i class="fas fa-search"></i>
-
 </button>
-
 </div>
 
-<div class="top-cart">
-
-<i class="fas fa-cart-shopping"></i>
-
 </div>
-
-</header>
 
 <!-- ADMIN BUTTON -->
-
-<button class="admin-btn"
-id="adminBtn"
-onclick="adminLogin()">
-
+<button class="adminBtn" id="adminBtn" onclick="loginAdmin()">
 Admin Login
-
 </button>
 
 <!-- MARKET -->
-
-<div class="market-box">
-
+<div class="market">
 <i class="fas fa-store"></i>
-
-<h2>Online Market</h2>
-
+Online Market
 </div>
 
-<!-- TOP LIST -->
+<!-- PRODUCT LIST -->
+<div class="products" id="productList"></div>
 
-<div class="section-title">
-TOP LIST
-</div>
+<!-- DETAILS -->
+<div class="detailsPage" id="detailsPage">
+<img id="dImg">
+<h2 id="dName"></h2>
+<p id="dPrice"></p>
+<p id="dText"></p>
 
-<div class="slider"
-id="topList">
-
-<div class="no-product">
-No Product
-</div>
-
-</div>
-
-<!-- PRODUCTS -->
-
-<div class="section-title">
-Products
-</div>
-
-<div class="products"
-id="productList">
-
-<!-- EMPTY -->
-
-</div>
-
-<!-- DETAILS PAGE -->
-
-<div class="details-page"
-id="detailsPage">
-
-<img id="detailsImg">
-
-<h2 id="detailsName"></h2>
-
-<p id="detailsPrice"></p>
-
-<p id="detailsText"></p>
-
-<button class="details-back"
-onclick="backHome()">
-
-Back
-
-</button>
-
+<button class="backBtn" onclick="back()">BACK</button>
 </div>
 
 <!-- ADMIN PANEL -->
-
-<div class="admin-panel"
-id="adminPanel">
-
-<button onclick="changePassword()">
-Change Password
-</button>
-
-<button onclick="addProduct()">
-Ad Post
-</button>
-
-<button onclick="editDelete()">
-Edit/Delete Post
-</button>
-
-<button onclick="addTopProduct()">
-Top Product Ad
-</button>
-
-<button onclick="viewOrders()">
-View Order
-</button>
-
-</div>
-
-<!-- BOTTOM NAV -->
-
-<div class="bottom-nav">
-
-<div class="nav-item"
-onclick="goHome()">
-
-<i class="fas fa-house"></i>
-HOME
-
-</div>
-
-<div class="nav-item"
-onclick="goBuy()">
-
-<i class="fas fa-bag-shopping"></i>
-BUY
-
-</div>
-
-<div class="nav-item">
-
-<i class="fas fa-cart-shopping"></i>
-CART
-
-</div>
-
-<div class="nav-item">
-
-<i class="fas fa-user"></i>
-ACCOUNT
-
-</div>
-
+<div class="adminPanel" id="adminPanel">
+<button onclick="addProduct()">Add Product</button>
+<button onclick="deleteProduct()">Edit/Delete</button>
 </div>
 
 <script>
 
-let adminPassword = "tamim31";
+let products = JSON.parse(localStorage.getItem("products")) || [];
 
-let products = [];
+let password = "tamim31";
 
-/* LOAD PRODUCT */
+/* SAVE */
+function save(){
+localStorage.setItem("products",JSON.stringify(products));
+}
 
-function loadProducts(){
-
-let list =
-document.getElementById("productList");
-
-list.innerHTML = "";
+/* LOAD */
+function load(){
+let box = document.getElementById("productList");
+box.innerHTML = "";
 
 if(products.length==0){
-
-list.innerHTML =
-"<div class='no-product'>No Product</div>";
-
+box.innerHTML = "<p style='padding:15px'>No Product</p>";
 return;
-
 }
 
-products.forEach((p,index)=>{
-
-list.innerHTML += `
-
+products.forEach((p,i)=>{
+box.innerHTML += `
 <div class="card">
-
 <img src="${p.img}">
-
-<div class="card-content">
+<div class="card-body">
 
 <h3>${p.name}</h3>
+<div class="price">৳ ${p.price}</div>
 
-<div class="price">
-৳ ${p.price}
-</div>
-
-<div class="btn-group">
-
-<button class="buy-btn"
-onclick="buyNow()">
-Buy
-</button>
-
-<button class="cart-btn"
-onclick="addCart()">
-Add To Cart
-</button>
-
-<button class="details-btn"
-onclick="showDetails(${index})">
-Details
-</button>
+<button class="btn buy" onclick="buy()">BUY</button>
+<button class="btn cart" onclick="cart()">CART</button>
+<button class="btn details" onclick="showDetails(${i})">DETAILS</button>
 
 </div>
-
 </div>
-
-</div>
-
 `;
-
 });
-
 }
 
-loadProducts();
+load();
 
 /* MENU */
+function openMenu(){menu.classList.add("active");}
+function closeMenu(){menu.classList.remove("active");}
 
-function openMenu(){
-
-document
-.getElementById("menu")
-.classList.add("active");
-
-}
-
-function closeMenu(){
-
-document
-.getElementById("menu")
-.classList.remove("active");
-
-}
-
-/* SEARCH */
-
-function searchProduct(){
-
-let input =
-document.getElementById("searchInput")
-.value.toLowerCase();
-
-let cards =
-document.querySelectorAll(".card");
-
-cards.forEach(card=>{
-
-let title =
-card.querySelector("h3")
-.innerText.toLowerCase();
-
-if(title.includes(input)){
-
-card.style.display="block";
-
-}else{
-
-card.style.display="none";
-
-}
-
-});
-
-}
-
-/* ADMIN */
-
+/* ADMIN SEARCH */
 function checkAdmin(){
-
-let input =
-document.getElementById("searchInput")
-.value.toLowerCase();
-
-if(input=="adminpenal"){
-
-document
-.getElementById("adminBtn")
-.style.display="block";
-
+if(search.value=="adminpenal"){
+adminBtn.style.display="block";
 }else{
-
-document
-.getElementById("adminBtn")
-.style.display="none";
-
+adminBtn.style.display="none";
+}
 }
 
-}
-
-function adminLogin(){
-
-let pass =
-prompt("Password");
-
-if(pass==adminPassword){
-
-document
-.getElementById("adminPanel")
-.style.display="block";
-
+/* LOGIN */
+function loginAdmin(){
+let p = prompt("Password");
+if(p==password){
+adminPanel.style.display="block";
 alert("Login Success");
-
-}else{
-
-alert("Wrong Password");
-
-}
-
-}
-
-function changePassword(){
-
-let newPass =
-prompt("New Password");
-
-if(newPass){
-
-adminPassword = newPass;
-
-alert("Password Changed");
-
-}
-
+}else alert("Wrong Password");
 }
 
 /* ADD PRODUCT */
-
 function addProduct(){
+let name = prompt("Name");
+let price = prompt("Price");
+let img = prompt("Image URL");
+let details = prompt("Details");
 
-let name =
-prompt("Product Name");
-
-let price =
-prompt("Price");
-
-let img =
-prompt("Image Link");
-
-let details =
-prompt("Details");
-
-products.push({
-
-name:name,
-price:price,
-img:img,
-details:details
-
-});
-
-loadProducts();
-
-alert("Product Uploaded");
-
+products.push({name,price,img,details});
+save();
+load();
 }
 
-/* EDIT DELETE */
-
-function editDelete(){
-
-let index =
-prompt("Product Number Start 0");
-
-let action =
-prompt("edit/delete");
-
-if(action=="delete"){
-
-products.splice(index,1);
-
-loadProducts();
-
-alert("Deleted");
-
+/* DELETE */
+function deleteProduct(){
+let i = prompt("Index number");
+products.splice(i,1);
+save();
+load();
 }
 
-if(action=="edit"){
+/* DETAILS */
+function showDetails(i){
+let p = products[i];
 
-products[index].name =
-prompt("New Name");
+dImg.src = p.img;
+dName.innerText = p.name;
+dPrice.innerText = "৳ " + p.price;
+dText.innerText = p.details;
 
-products[index].price =
-prompt("New Price");
-
-products[index].details =
-prompt("New Details");
-
-loadProducts();
-
-alert("Edited");
-
+productList.style.display="none";
+detailsPage.style.display="block";
 }
 
+/* BACK */
+function back(){
+detailsPage.style.display="none";
+productList.style.display="grid";
 }
 
-/* TOP PRODUCT */
-
-function addTopProduct(){
-
-let name =
-prompt("Product Name");
-
-let price =
-prompt("Price");
-
-let img =
-prompt("Image Link");
-
-document
-.getElementById("topList")
-.innerHTML += `
-
-<div class="card"
-style="min-width:260px;">
-
-<img src="${img}">
-
-<div class="card-content">
-
-<h3>${name}</h3>
-
-<div class="price">
-৳ ${price}
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}
-
-/* DETAILS PAGE */
-
-function showDetails(index){
-
-let p = products[index];
-
-document
-.getElementById("detailsImg")
-.src = p.img;
-
-document
-.getElementById("detailsName")
-.innerText = p.name;
-
-document
-.getElementById("detailsPrice")
-.innerText = "৳ " + p.price;
-
-document
-.getElementById("detailsText")
-.innerText = p.details;
-
-document
-.getElementById("detailsPage")
-.style.display = "block";
-
-document
-.getElementById("productList")
-.style.display = "none";
-
-}
-
-function backHome(){
-
-document
-.getElementById("detailsPage")
-.style.display = "none";
-
-document
-.getElementById("productList")
-.style.display = "grid";
-
-}
-
-/* BUY */
-
-function buyNow(){
-
-alert("Order Success");
-
-}
-
-function addCart(){
-
-alert("Added To Cart");
-
-}
-
-/* VIEW ORDER */
-
-function viewOrders(){
-
-alert("No Orders");
-
-}
-
-/* NAV */
-
-function goHome(){
-
-window.scrollTo(0,0);
-
-}
-
-function goBuy(){
-
-document
-.getElementById("productList")
-.scrollIntoView();
-
-}
+/* BUTTONS */
+function buy(){alert("Order placed");}
+function cart(){alert("Added to cart");}
 
 </script>
 
