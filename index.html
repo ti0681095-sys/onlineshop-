@@ -1,8 +1,11 @@
+<!-- OLD CODE DELETE করে এইটা পুরো index.html এ PASTE করো -->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>Online Market</title>
 
@@ -20,7 +23,7 @@ font-family:Arial,sans-serif;
 
 body{
 background:white;
-padding-bottom:90px;
+padding-bottom:100px;
 }
 
 /* HEADER */
@@ -37,56 +40,16 @@ z-index:1000;
 border-bottom:1px solid #eee;
 }
 
-.left-header{
-display:flex;
-align-items:center;
-gap:15px;
-}
-
-/* MENU */
-
 .menu-btn{
 font-size:28px;
 color:orange;
 cursor:pointer;
 }
 
-.menu{
-position:fixed;
-top:0;
-left:-260px;
-width:250px;
-height:100%;
-background:white;
-box-shadow:0 0 15px rgba(0,0,0,0.2);
-padding:20px;
-transition:0.3s;
-z-index:2000;
-}
-
-.menu.active{
-left:0;
-}
-
-.menu h2{
-margin-bottom:20px;
+.top-cart{
+font-size:28px;
 color:orange;
-}
-
-.menu a{
-display:block;
-padding:14px;
-text-decoration:none;
-color:#333;
-border-radius:10px;
-margin-bottom:10px;
-font-size:18px;
-transition:0.3s;
-}
-
-.menu a:hover{
-background:orange;
-color:white;
+cursor:pointer;
 }
 
 /* SEARCH */
@@ -115,16 +78,59 @@ border:none;
 background:orange;
 color:white;
 padding:12px 18px;
-font-size:18px;
 cursor:pointer;
+font-size:18px;
 }
 
-/* TOP CART */
+/* MENU */
 
-.top-cart{
-font-size:28px;
+.menu{
+position:fixed;
+top:0;
+left:-260px;
+width:250px;
+height:100%;
+background:white;
+box-shadow:0 0 20px rgba(0,0,0,0.2);
+padding:20px;
+transition:0.3s;
+z-index:9999;
+}
+
+.menu.active{
+left:0;
+}
+
+.menu h2{
 color:orange;
-cursor:pointer;
+margin-bottom:20px;
+}
+
+.menu a{
+display:block;
+padding:14px;
+text-decoration:none;
+color:#333;
+margin-bottom:10px;
+border-radius:10px;
+font-size:18px;
+transition:0.3s;
+}
+
+.menu a:hover{
+background:orange;
+color:white;
+}
+
+.back-btn{
+background:black;
+color:white;
+padding:12px;
+border:none;
+width:100%;
+border-radius:10px;
+margin-top:15px;
+font-size:16px;
 }
 
 /* ONLINE MARKET */
@@ -132,11 +138,11 @@ cursor:pointer;
 .market-box{
 margin:20px;
 background:orange;
-padding:15px;
-border-radius:15px;
+padding:16px;
+border-radius:16px;
 display:flex;
 align-items:center;
-gap:12px;
+gap:15px;
 color:white;
 }
 
@@ -145,20 +151,19 @@ font-size:35px;
 }
 
 .market-box h2{
-font-size:24px;
+font-size:28px;
 }
 
-/* TOP LIST */
+/* SECTION */
 
 .section-title{
 padding:0 20px;
-margin-top:10px;
-margin-bottom:15px;
-font-size:28px;
+font-size:30px;
 font-weight:bold;
+margin-bottom:15px;
 }
 
-/* SLIDER */
+/* TOP PRODUCT */
 
 .slider{
 display:flex;
@@ -173,8 +178,8 @@ display:none;
 }
 
 .slide-card{
-min-width:280px;
-background:#fff;
+min-width:260px;
+background:white;
 border-radius:20px;
 overflow:hidden;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
@@ -197,7 +202,7 @@ margin-bottom:10px;
 .slide-info p{
 color:orange;
 font-size:20px;
-margin-bottom:10px;
+font-weight:bold;
 }
 
 /* PRODUCTS */
@@ -205,13 +210,14 @@ margin-bottom:10px;
 .products{
 padding:20px;
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(170px,1fr));
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
 gap:20px;
 }
 
 .card{
 background:white;
-border-radius:18px;
+border-radius:20px;
 overflow:hidden;
 box-shadow:0 5px 15px rgba(0,0,0,0.1);
 transition:0.3s;
@@ -223,24 +229,24 @@ transform:translateY(-5px);
 
 .card img{
 width:100%;
-height:170px;
+height:180px;
 object-fit:cover;
 }
 
 .card-content{
-padding:12px;
+padding:15px;
 }
 
 .card-content h3{
-font-size:18px;
-margin-bottom:8px;
+font-size:20px;
+margin-bottom:10px;
 }
 
 .price{
 color:orange;
-font-size:20px;
-margin-bottom:10px;
+font-size:22px;
 font-weight:bold;
+margin-bottom:12px;
 }
 
 .btn-group{
@@ -250,13 +256,14 @@ gap:10px;
 }
 
 .buy-btn,
-.cart-btn{
+.cart-btn,
+.details-btn{
 border:none;
-padding:10px;
-border-radius:10px;
-cursor:pointer;
+padding:11px;
+border-radius:12px;
 font-size:15px;
 font-weight:bold;
+cursor:pointer;
 }
 
 .buy-btn{
@@ -269,6 +276,42 @@ background:#111;
 color:white;
 }
 
+.details-btn{
+background:#f3f4f6;
+}
+
+/* ADMIN */
+
+.admin-btn{
+margin:20px;
+padding:14px;
+background:orange;
+color:white;
+border:none;
+border-radius:12px;
+width:calc(100% - 40px);
+font-size:18px;
+display:none;
+}
+
+/* ADMIN PANEL */
+
+.admin-panel{
+display:none;
+padding:20px;
+}
+
+.admin-panel button{
+width:100%;
+padding:15px;
+margin-bottom:15px;
+border:none;
+background:orange;
+color:white;
+font-size:17px;
+border-radius:12px;
+}
+
 /* BOTTOM NAV */
 
 .bottom-nav{
@@ -279,16 +322,16 @@ width:100%;
 background:orange;
 display:flex;
 justify-content:space-around;
-padding:10px 0;
-z-index:3000;
+padding:12px 0;
+z-index:5000;
 }
 
 .nav-item{
 display:flex;
 flex-direction:column;
 align-items:center;
-font-size:14px;
 color:white;
+font-size:14px;
 cursor:pointer;
 }
 
@@ -297,35 +340,27 @@ font-size:22px;
 margin-bottom:5px;
 }
 
-/* NO PRODUCT */
-
-.no-product{
-padding:20px;
-text-align:center;
-font-size:18px;
-color:#888;
-}
-
 </style>
 </head>
 
 <body>
 
-<!-- SIDE MENU -->
+<!-- MENU -->
 
 <div class="menu" id="menu">
 
 <h2>Menu</h2>
 
-<a href="#"><i class="fas fa-user"></i> Account</a>
+<a href="#">Account</a>
+<a href="#">Buy</a>
+<a href="#">Cart</a>
+<a href="#">Support</a>
+<a href="#">Details</a>
 
-<a href="#"><i class="fas fa-bag-shopping"></i> Buy</a>
-
-<a href="#"><i class="fas fa-cart-shopping"></i> Cart</a>
-
-<a href="#"><i class="fas fa-headset"></i> Support</a>
-
-<a href="#"><i class="fas fa-circle-info"></i> Details</a>
+<button class="back-btn"
+onclick="closeMenu()">
+BACK
+</button>
 
 </div>
 
@@ -333,32 +368,45 @@ color:#888;
 
 <header>
 
-<div class="left-header">
+<div class="menu-btn"
+onclick="openMenu()">
 
-<div class="menu-btn" onclick="openMenu()">
 <i class="fas fa-bars"></i>
-</div>
 
 </div>
 
 <div class="search-box">
 
-<input
-type="text"
+<input type="text"
 id="searchInput"
-placeholder="Search products...">
+placeholder="Search products..."
+oninput="checkAdmin()">
 
 <button onclick="searchProduct()">
+
 <i class="fas fa-search"></i>
+
 </button>
 
 </div>
 
 <div class="top-cart">
+
 <i class="fas fa-cart-shopping"></i>
+
 </div>
 
 </header>
+
+<!-- ADMIN LOGIN BUTTON -->
+
+<button class="admin-btn"
+id="adminBtn"
+onclick="adminLogin()">
+
+Admin Login
+
+</button>
 
 <!-- ONLINE MARKET -->
 
@@ -376,45 +424,17 @@ placeholder="Search products...">
 TOP LIST
 </div>
 
-<div class="slider">
+<div class="slider" id="topList">
 
 <div class="slide-card">
 
-<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000">
+<img src="https://images.unsplash.com/photo-1600185365483-26d7a4cc7519?q=80&w=1000">
 
 <div class="slide-info">
 
-<h3>Running Shoes</h3>
+<h3>Premium Shoes</h3>
 
-<p>$79</p>
-
-</div>
-
-</div>
-
-<div class="slide-card">
-
-<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000">
-
-<div class="slide-info">
-
-<h3>Headphone</h3>
-
-<p>$99</p>
-
-</div>
-
-</div>
-
-<div class="slide-card">
-
-<img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000">
-
-<div class="slide-info">
-
-<h3>Smart Phone</h3>
-
-<p>$699</p>
+<p>৳ 2500</p>
 
 </div>
 
@@ -428,127 +448,35 @@ TOP LIST
 Products
 </div>
 
-<div class="products" id="productList">
+<div class="products"
+id="productList">
 
-<!-- PRODUCT -->
+</div>
 
-<div class="card">
+<!-- ADMIN PANEL -->
 
-<img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000">
+<div class="admin-panel"
+id="adminPanel">
 
-<div class="card-content">
-
-<h3>Running Shoes</h3>
-
-<div class="price">$79</div>
-
-<div class="btn-group">
-
-<button class="buy-btn"
-onclick="buyNow()">
-Buy
+<button onclick="changePassword()">
+Change Password
 </button>
 
-<button class="cart-btn"
-onclick="addCart()">
-Add To Cart
+<button onclick="addProduct()">
+Ad Post
 </button>
 
-</div>
-
-</div>
-
-</div>
-
-<!-- PRODUCT -->
-
-<div class="card">
-
-<img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000">
-
-<div class="card-content">
-
-<h3>Headphone</h3>
-
-<div class="price">$99</div>
-
-<div class="btn-group">
-
-<button class="buy-btn"
-onclick="buyNow()">
-Buy
+<button onclick="editDelete()">
+Edit/Delete Post
 </button>
 
-<button class="cart-btn"
-onclick="addCart()">
-Add To Cart
+<button onclick="addTopProduct()">
+Top Product Ad
 </button>
 
-</div>
-
-</div>
-
-</div>
-
-<!-- PRODUCT -->
-
-<div class="card">
-
-<img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000">
-
-<div class="card-content">
-
-<h3>Smart Phone</h3>
-
-<div class="price">$699</div>
-
-<div class="btn-group">
-
-<button class="buy-btn"
-onclick="buyNow()">
-Buy
+<button onclick="viewOrders()">
+View Order
 </button>
-
-<button class="cart-btn"
-onclick="addCart()">
-Add To Cart
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-<!-- PRODUCT -->
-
-<div class="card">
-
-<img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000">
-
-<div class="card-content">
-
-<h3>Smart Watch</h3>
-
-<div class="price">$120</div>
-
-<div class="btn-group">
-
-<button class="buy-btn"
-onclick="buyNow()">
-Buy
-</button>
-
-<button class="cart-btn"
-onclick="addCart()">
-Add To Cart
-</button>
-
-</div>
-
-</div>
-
-</div>
 
 </div>
 
@@ -556,43 +484,141 @@ Add To Cart
 
 <div class="bottom-nav">
 
-<div class="nav-item">
+<div class="nav-item"
+onclick="goHome()">
+
 <i class="fas fa-house"></i>
 HOME
+
 </div>
 
-<div class="nav-item">
+<div class="nav-item"
+onclick="goBuy()">
+
 <i class="fas fa-bag-shopping"></i>
 BUY
+
 </div>
 
 <div class="nav-item">
+
 <i class="fas fa-cart-shopping"></i>
 CART
+
 </div>
 
 <div class="nav-item">
+
 <i class="fas fa-user"></i>
 ACCOUNT
-</div>
 
 </div>
 
-<!-- JAVASCRIPT -->
+</div>
 
 <script>
+
+/* DEFAULT PASSWORD */
+
+let adminPassword = "tamim31";
+
+/* PRODUCT DATA */
+
+let products = [
+
+{
+name:"Gaming Mouse",
+price:"৳ 1200",
+img:"https://images.unsplash.com/photo-1527814050087-3793815479db?q=80&w=1000",
+details:"RGB Gaming Mouse"
+},
+
+{
+name:"Wireless Headphone",
+price:"৳ 3200",
+img:"https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000",
+details:"Premium Sound"
+}
+
+];
+
+/* LOAD PRODUCTS */
+
+function loadProducts(){
+
+let list =
+document.getElementById("productList");
+
+list.innerHTML = "";
+
+products.forEach((p,index)=>{
+
+list.innerHTML += `
+
+<div class="card">
+
+<img src="${p.img}">
+
+<div class="card-content">
+
+<h3>${p.name}</h3>
+
+<div class="price">${p.price}</div>
+
+<div class="btn-group">
+
+<button class="buy-btn"
+onclick="buyNow()">
+Buy
+</button>
+
+<button class="cart-btn"
+onclick="addCart()">
+Add To Cart
+</button>
+
+<button class="details-btn"
+onclick="showDetails('${p.details}')">
+Details
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+`;
+
+});
+
+}
+
+loadProducts();
+
+/* MENU */
 
 function openMenu(){
 
 document
 .getElementById("menu")
-.classList.toggle("active");
+.classList.add("active");
 
 }
 
+function closeMenu(){
+
+document
+.getElementById("menu")
+.classList.remove("active");
+
+}
+
+/* BUY */
+
 function buyNow(){
 
-alert("Product Buy Success ✅");
+alert("Order Success ✅");
 
 }
 
@@ -601,6 +627,14 @@ function addCart(){
 alert("Added To Cart 🛒");
 
 }
+
+function showDetails(text){
+
+alert(text);
+
+}
+
+/* SEARCH */
 
 function searchProduct(){
 
@@ -611,7 +645,7 @@ document.getElementById("searchInput")
 let cards =
 document.querySelectorAll(".card");
 
-cards.forEach(card => {
+cards.forEach(card=>{
 
 let title =
 card.querySelector("h3")
@@ -628,6 +662,197 @@ card.style.display="none";
 }
 
 });
+
+}
+
+/* ADMIN */
+
+function checkAdmin(){
+
+let input =
+document.getElementById("searchInput")
+.value.toLowerCase();
+
+if(input=="adminpenal"){
+
+document
+.getElementById("adminBtn")
+.style.display="block";
+
+}else{
+
+document
+.getElementById("adminBtn")
+.style.display="none";
+
+}
+
+}
+
+function adminLogin(){
+
+let pass =
+prompt("Enter Password");
+
+if(pass==adminPassword){
+
+alert("Login Success ✅");
+
+document
+.getElementById("adminPanel")
+.style.display="block";
+
+window.scrollTo(0,
+document.body.scrollHeight);
+
+}else{
+
+alert("Wrong Password ❌");
+
+}
+
+}
+
+/* CHANGE PASSWORD */
+
+function changePassword(){
+
+let newPass =
+prompt("New Password");
+
+if(newPass){
+
+adminPassword = newPass;
+
+alert("Password Changed ✅");
+
+}
+
+}
+
+/* ADD PRODUCT */
+
+function addProduct(){
+
+let name =
+prompt("Product Name");
+
+let price =
+prompt("Price");
+
+let img =
+prompt("Image Link");
+
+let details =
+prompt("Details");
+
+products.push({
+
+name:name,
+price:"৳ "+price,
+img:img,
+details:details
+
+});
+
+loadProducts();
+
+alert("Uploaded ✅");
+
+}
+
+/* EDIT DELETE */
+
+function editDelete(){
+
+let index =
+prompt("Product Number Start From 0");
+
+let action =
+prompt("edit/delete");
+
+if(action=="delete"){
+
+products.splice(index,1);
+
+loadProducts();
+
+alert("Deleted");
+
+}
+
+if(action=="edit"){
+
+products[index].name =
+prompt("New Name");
+
+products[index].price =
+"৳ "+prompt("New Price");
+
+loadProducts();
+
+alert("Edited");
+
+}
+
+}
+
+/* TOP PRODUCT */
+
+function addTopProduct(){
+
+let name =
+prompt("Product Name");
+
+let price =
+prompt("Price");
+
+let img =
+prompt("Image Link");
+
+document
+.getElementById("topList")
+.innerHTML += `
+
+<div class="slide-card">
+
+<img src="${img}">
+
+<div class="slide-info">
+
+<h3>${name}</h3>
+
+<p>৳ ${price}</p>
+
+</div>
+
+</div>
+
+`;
+
+}
+
+/* ORDER */
+
+function viewOrders(){
+
+alert("No Orders Yet");
+
+}
+
+/* NAV */
+
+function goHome(){
+
+window.scrollTo(0,0);
+
+}
+
+function goBuy(){
+
+document
+.getElementById("productList")
+.scrollIntoView();
 
 }
 
