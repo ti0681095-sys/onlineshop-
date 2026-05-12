@@ -1,11 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Online Shop</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>NeoShop Ecommerce</title>
+
+  <link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"/>
 
   <style>
+
     *{
       margin:0;
       padding:0;
@@ -14,73 +19,161 @@
     }
 
     body{
-      background:#f5f5f5;
+      background:#f1f5f9;
+      color:#111827;
     }
+
+    /* HEADER */
 
     header{
-      background:#111;
+      background:#0f172a;
       color:white;
-      padding:20px;
-      text-align:center;
+      padding:15px 5%;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      flex-wrap:wrap;
+      position:sticky;
+      top:0;
+      z-index:1000;
     }
 
-    header h1{
-      font-size:32px;
+    .logo{
+      font-size:30px;
+      font-weight:bold;
+      color:#38bdf8;
     }
 
-    nav{
-      margin-top:10px;
+    .search-box{
+      background:white;
+      border-radius:8px;
+      overflow:hidden;
+      display:flex;
+      width:350px;
+      max-width:100%;
     }
 
-    nav a{
+    .search-box input{
+      border:none;
+      outline:none;
+      padding:12px;
+      width:100%;
+      font-size:16px;
+    }
+
+    .search-box button{
+      border:none;
+      background:#38bdf8;
       color:white;
-      text-decoration:none;
-      margin:0 10px;
+      padding:0 18px;
+      cursor:pointer;
       font-size:18px;
     }
+
+    .icons{
+      display:flex;
+      gap:20px;
+      font-size:22px;
+    }
+
+    .icons i{
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .icons i:hover{
+      color:#38bdf8;
+    }
+
+    /* HERO */
 
     .hero{
-      background:linear-gradient(to right,#111,#444);
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:70px 5%;
+      flex-wrap:wrap;
+      gap:40px;
+      background:linear-gradient(to right,#0f172a,#1e293b);
       color:white;
-      text-align:center;
-      padding:60px 20px;
     }
 
-    .hero h2{
-      font-size:40px;
-      margin-bottom:10px;
+    .hero-text{
+      flex:1;
     }
 
-    .hero p{
+    .hero-text h1{
+      font-size:60px;
+      margin-bottom:20px;
+      line-height:1.1;
+    }
+
+    .hero-text span{
+      color:#38bdf8;
+    }
+
+    .hero-text p{
       font-size:18px;
+      color:#cbd5e1;
+      margin-bottom:25px;
     }
+
+    .hero-text button{
+      padding:14px 28px;
+      border:none;
+      border-radius:8px;
+      background:#38bdf8;
+      color:white;
+      font-size:18px;
+      cursor:pointer;
+      transition:0.3s;
+    }
+
+    .hero-text button:hover{
+      background:#0ea5e9;
+      transform:scale(1.05);
+    }
+
+    .hero-image{
+      flex:1;
+      text-align:center;
+    }
+
+    .hero-image img{
+      width:100%;
+      max-width:500px;
+      border-radius:20px;
+      box-shadow:0 0 30px rgba(56,189,248,0.4);
+    }
+
+    /* PRODUCTS */
 
     .products{
-      padding:40px 20px;
+      padding:70px 5%;
     }
 
-    .products h2{
+    .section-title{
       text-align:center;
-      margin-bottom:30px;
-      font-size:32px;
+      font-size:40px;
+      margin-bottom:40px;
     }
 
     .product-grid{
       display:grid;
       grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-      gap:25px;
+      gap:30px;
     }
 
     .card{
       background:white;
-      border-radius:10px;
+      border-radius:18px;
       overflow:hidden;
       box-shadow:0 5px 15px rgba(0,0,0,0.1);
       transition:0.3s;
     }
 
     .card:hover{
-      transform:translateY(-5px);
+      transform:translateY(-8px);
     }
 
     .card img{
@@ -90,116 +183,344 @@
     }
 
     .card-content{
-      padding:15px;
-      text-align:center;
+      padding:20px;
     }
 
     .card-content h3{
       margin-bottom:10px;
-      font-size:22px;
+      font-size:24px;
     }
 
     .price{
-      color:green;
-      font-size:20px;
+      color:#0ea5e9;
+      font-size:22px;
       margin-bottom:15px;
     }
 
-    button{
-      background:#111;
-      color:white;
+    .rating{
+      color:orange;
+      margin-bottom:15px;
+    }
+
+    .card-content button{
+      width:100%;
+      padding:12px;
       border:none;
-      padding:12px 20px;
-      border-radius:5px;
+      border-radius:8px;
+      background:#0f172a;
+      color:white;
       cursor:pointer;
+      font-size:16px;
       transition:0.3s;
     }
 
-    button:hover{
-      background:#ff6600;
+    .card-content button:hover{
+      background:#38bdf8;
     }
 
+    /* FEATURES */
+
+    .features{
+      display:grid;
+      grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+      gap:25px;
+      padding:50px 5%;
+      background:white;
+    }
+
+    .feature-box{
+      text-align:center;
+      padding:30px;
+      border-radius:15px;
+      background:#f8fafc;
+      transition:0.3s;
+    }
+
+    .feature-box:hover{
+      transform:translateY(-5px);
+    }
+
+    .feature-box i{
+      font-size:40px;
+      color:#38bdf8;
+      margin-bottom:15px;
+    }
+
+    /* FOOTER */
+
     footer{
-      background:#111;
+      background:#0f172a;
       color:white;
       text-align:center;
-      padding:20px;
-      margin-top:40px;
+      padding:30px;
+      margin-top:50px;
     }
+
+    /* RESPONSIVE */
+
+    @media(max-width:768px){
+
+      .hero-text h1{
+        font-size:42px;
+      }
+
+      header{
+        gap:20px;
+      }
+
+      .search-box{
+        width:100%;
+      }
+
+    }
+
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>My Online Shop</h1>
+  <!-- HEADER -->
 
-    <nav>
-      <a href="#">Home</a>
-      <a href="#">Products</a>
-      <a href="#">Contact</a>
-    </nav>
+  <header>
+
+    <div class="logo">
+      NeoShop
+    </div>
+
+    <div class="search-box">
+
+      <input type="text"
+      id="searchInput"
+      placeholder="Search products...">
+
+      <button onclick="searchProduct()">
+        <i class="fas fa-search"></i>
+      </button>
+
+    </div>
+
+    <div class="icons">
+      <i class="fas fa-heart"></i>
+      <i class="fas fa-shopping-cart"></i>
+      <i class="fas fa-user"></i>
+    </div>
+
   </header>
 
+  <!-- HERO -->
+
   <section class="hero">
-    <h2>Welcome To My Shop 🛒</h2>
-    <p>Best Products With Best Prices</p>
+
+    <div class="hero-text">
+
+      <h1>
+        Modern <span>Ecommerce</span> Store
+      </h1>
+
+      <p>
+        Buy premium products with stylish UI design
+        and smooth shopping experience.
+      </p>
+
+      <button onclick="shopNow()">
+        Shop Now
+      </button>
+
+    </div>
+
+    <div class="hero-image">
+
+      <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000">
+
+    </div>
+
   </section>
+
+  <!-- PRODUCTS -->
 
   <section class="products">
 
-    <h2>Featured Products</h2>
+    <h2 class="section-title">
+      Trending Products
+    </h2>
 
-    <div class="product-grid">
+    <div class="product-grid" id="productGrid">
+
+      <!-- PRODUCT 1 -->
 
       <div class="card">
-        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000" alt="">
+
+        <img src="https://images.unsplash.com/photo-1542291026-7eec264c27ff?q=80&w=1000">
+
         <div class="card-content">
+
           <h3>Running Shoes</h3>
-          <p class="price">$49</p>
-          <button onclick="buyNow()">Buy Now</button>
+
+          <div class="price">$79</div>
+
+          <div class="rating">
+            ⭐⭐⭐⭐⭐
+          </div>
+
+          <button onclick="addCart()">
+            Add To Cart
+          </button>
+
         </div>
+
       </div>
 
+      <!-- PRODUCT 2 -->
+
       <div class="card">
-        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000" alt="">
+
+        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000">
+
         <div class="card-content">
+
+          <h3>Headphones</h3>
+
+          <div class="price">$99</div>
+
+          <div class="rating">
+            ⭐⭐⭐⭐☆
+          </div>
+
+          <button onclick="addCart()">
+            Add To Cart
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- PRODUCT 3 -->
+
+      <div class="card">
+
+        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000">
+
+        <div class="card-content">
+
+          <h3>Smart Phone</h3>
+
+          <div class="price">$699</div>
+
+          <div class="rating">
+            ⭐⭐⭐⭐⭐
+          </div>
+
+          <button onclick="addCart()">
+            Add To Cart
+          </button>
+
+        </div>
+
+      </div>
+
+      <!-- PRODUCT 4 -->
+
+      <div class="card">
+
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?q=80&w=1000">
+
+        <div class="card-content">
+
           <h3>Smart Watch</h3>
-          <p class="price">$89</p>
-          <button onclick="buyNow()">Buy Now</button>
-        </div>
-      </div>
 
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?q=80&w=1000" alt="">
-        <div class="card-content">
-          <h3>iPhone</h3>
-          <p class="price">$699</p>
-          <button onclick="buyNow()">Buy Now</button>
-        </div>
-      </div>
+          <div class="price">$120</div>
 
-      <div class="card">
-        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1000" alt="">
-        <div class="card-content">
-          <h3>Headphone</h3>
-          <p class="price">$39</p>
-          <button onclick="buyNow()">Buy Now</button>
+          <div class="rating">
+            ⭐⭐⭐⭐☆
+          </div>
+
+          <button onclick="addCart()">
+            Add To Cart
+          </button>
+
         </div>
+
       </div>
 
     </div>
 
   </section>
 
+  <!-- FEATURES -->
+
+  <section class="features">
+
+    <div class="feature-box">
+      <i class="fas fa-truck"></i>
+      <h3>Fast Delivery</h3>
+      <p>Quick product delivery worldwide.</p>
+    </div>
+
+    <div class="feature-box">
+      <i class="fas fa-lock"></i>
+      <h3>Secure Payment</h3>
+      <p>100% secure online payment system.</p>
+    </div>
+
+    <div class="feature-box">
+      <i class="fas fa-headset"></i>
+      <h3>24/7 Support</h3>
+      <p>Friendly customer support anytime.</p>
+    </div>
+
+  </section>
+
+  <!-- FOOTER -->
+
   <footer>
-    <p>© 2026 My Online Shop | All Rights Reserved</p>
+    © 2026 NeoShop Ecommerce Website
   </footer>
 
+  <!-- JAVASCRIPT -->
+
   <script>
-    function buyNow(){
-      alert("Product Added Successfully 🛒");
+
+    function addCart(){
+
+      alert("Product Added To Cart 🛒");
+
     }
+
+    function shopNow(){
+
+      alert("Welcome To NeoShop 🔥");
+
+    }
+
+    function searchProduct(){
+
+      let input =
+      document.getElementById("searchInput")
+      .value.toLowerCase();
+
+      let cards =
+      document.querySelectorAll(".card");
+
+      cards.forEach(card => {
+
+        let title =
+        card.querySelector("h3")
+        .innerText.toLowerCase();
+
+        if(title.includes(input)){
+
+          card.style.display="block";
+
+        }else{
+
+          card.style.display="none";
+
+        }
+
+      });
+
+    }
+
   </script>
 
 </body>
