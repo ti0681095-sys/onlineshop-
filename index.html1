@@ -1,0 +1,759 @@
+
+
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Screen Care Shop</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --bg-dark: #0a0c10;
+            --card-bg: #161920;
+            --text-glow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(0, 242, 254, 0.4);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
+
+        /* 1. Intro Animation */
+        #intro-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a1c23 0%, #050508 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s;
+        }
+        .intro-cube {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            animation: cubeAnim 2s infinite ease-in-out;
+            box-shadow: var(--text-glow);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .intro-text {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: var(--text-glow);
+        }
+        @keyframes cubeAnim {
+            0% { transform: rotate(0deg) scale(1); border-radius: 15px; }
+            50% { transform: rotate(180deg) scale(1.2); border-radius: 50%; filter: hue-rotate(180deg); }
+            100% { transform: rotate(360deg) scale(1); border-radius: 15px; }
+        }
+
+        /* Header Style */
+        header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(22,25,32,0.9), transparent);
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            max-width: 600px;
+            margin: 0 auto 15px auto;
+            padding: 0 10px;
+        }
+        .search-container { flex: 1; }
+        .search-box {
+            width: 100%; padding: 12px 20px; border-radius: 25px; border: 2px solid #2a2f3b; background: #11141a; color: #fff; font-size: 16px; outline: none; transition: 0.3s;
+        }
+        .search-box:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 254, 0.4); }
+        .glowing-title {
+            font-size: 28px; font-weight: 800; color: #fff; text-transform: uppercase; letter-spacing: 1px; margin-top: 10px; animation: blinkGlow 1.2s infinite alternate ease-in-out;
+        }
+        @keyframes blinkGlow {
+            0% { text-shadow: 0 0 5px #00f2fe, 0 0 10px #00f2fe; opacity: 0.5; }
+            100% { text-shadow: 0 0 20px #00f2fe, 0 0 30px #4facfe; opacity: 1; }
+        }
+
+        /* Navigation Pages */
+        .page { display: none; padding: 15px; animation: fadeIn 0.5s ease; }
+        .page.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* Product Grid Layout */
+        .product-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; max-width: 800px; margin: 0 auto; }
+        .product-card {
+            background: var(--card-bg); border-radius: 15px; padding: 12px; text-align: center; border: 1px solid #232836; display: flex; flex-direction: column; justify-content: space-between; transition: transform 0.3s;
+        }
+        .product-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .product-img { width: 100%; height: 130px; object-fit: cover; border-radius: 10px; background: #2a2f3b; }
+        .product-name { font-size: 15px; margin: 8px 0 4px 0; color: #fff; font-weight: 600; }
+        .product-price { color: var(--primary); font-weight: bold; font-size: 15px; margin-bottom: 8px; }
+        .btn-add-cart {
+            background: linear-gradient(135deg, var(--secondary), var(--primary)); color: #000; font-weight: bold; border: none; padding: 10px; border-radius: 8px; cursor: pointer; width: 100%; font-size: 14px;
+        }
+        .btn-details { color: #4facfe; font-size: 12px; background: none; border: none; margin-top: 8px; text-decoration: underline; cursor: pointer; }
+
+        /* Bottom Fixed Navigation Bar */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 75px; background: #11141a; border-top: 2px solid #232836; display: flex; justify-content: space-around; align-items: center; z-index: 1000;
+        }
+        .nav-item { display: flex; flex-direction: column; align-items: center; color: #8e9aa8; text-decoration: none; font-size: 11px; cursor: pointer; position: relative; flex: 1; }
+        .nav-item i { font-size: 22px; margin-bottom: 4px; transition: 0.3s; }
+        .nav-item.active { color: var(--primary); text-shadow: var(--text-glow); }
+        .nav-item.active i { transform: translateY(-4px); }
+        
+        /* Badges Formatting */
+        .cart-badge, .support-badge, .float-badge {
+            position: absolute; top: -6px; right: 22%; background: red; color: white; font-size: 10px; padding: 2px 7px; border-radius: 50%; font-weight: bold; display: none; z-index: 10;
+        }
+
+        /* Address Button & Dynamic Blinking */
+        .btn-address {
+            width: 100%; padding: 12px; font-weight: bold; font-size: 16px; border: none; border-radius: 10px; cursor: pointer; margin-bottom: 20px; transition: 0.3s;
+        }
+        .addr-red { animation: blinkRed 1s infinite alternate; color: white; }
+        .addr-green { animation: blinkGreen 1s infinite alternate; color: black; }
+        @keyframes blinkRed { 0% { background: #ff4d4d; box-shadow: 0 0 5px #ff4d4d; } 100% { background: #800000; box-shadow: 0 0 15px #ff4d4d; } }
+        @keyframes blinkGreen { 0% { background: #25D366; box-shadow: 0 0 5px #25D366; } 100% { background: #0e622b; box-shadow: 0 0 15px #25D366; color: white; } }
+
+        /* Support Page & Messenger Live Chat Style */
+        .support-container { max-width: 400px; margin: 30px auto; display: flex; flex-direction: column; gap: 15px; }
+        .support-btn {
+            display: flex; align-items: center; justify-content: center; gap: 15px; padding: 15px; border-radius: 12px; text-decoration: none; font-weight: bold; font-size: 16px; color: #fff; border: none; cursor: pointer; position: relative;
+        }
+        .btn-whatsapp { background: #25D366; }
+        .btn-telegram { background: #0088cc; }
+        .btn-livechat { background: linear-gradient(135deg, #00c6ff, #0072ff); animation: slowGlow 4s infinite alternate ease-in-out; }
+        @keyframes slowGlow { 0% { box-shadow: 0 0 5px #00c6ff; } 100% { box-shadow: 0 0 25px #0072ff; } }
+        
+        /* Floating Support Round Button Widget */
+        .floating-support-widget {
+            position: fixed; bottom: 95px; right: 20px; width: 60px; height: 60px; background: linear-gradient(135deg, #00c6ff, #0072ff); border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 26px; color: white; cursor: pointer; box-shadow: 0 4px 15px rgba(0,114,255,0.4); z-index: 2500; animation: slowGlow 3s infinite alternate ease-in-out;
+        }
+        
+        /* Messenger Chat Window UI */
+        .messenger-wrap {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0f111a; z-index: 3000; display: flex; flex-direction: column;
+        }
+        .messenger-header {
+            background: #161920; padding: 15px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #232836;
+        }
+        .messenger-body {
+            flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; background: radial-gradient(circle, #1a1d29 0%, #0a0c10 100%);
+        }
+        .msg-bubble { max-width: 75%; padding: 10px 14px; border-radius: 15px; font-size: 14px; line-height: 1.4; }
+        .msg-left { background: #232836; color: white; align-self: flex-start; border-bottom-left-radius: 2px; }
+        .msg-right { background: #0072ff; color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+        .messenger-footer {
+            padding: 12px; background: #161920; display: flex; gap: 10px; border-top: 1px solid #232836;
+        }
+        .messenger-footer input {
+            flex: 1; padding: 12px; background: #0a0c10; border: 1px solid #232836; color: white; border-radius: 25px; outline: none;
+        }
+        .btn-send-msg {
+            background: #0072ff; color: white; border: none; width: 45px; height: 45px; border-radius: 50%; cursor: pointer;
+        }
+
+        /* Cart Page Styling */
+        .cart-total-header { font-size: 22px; text-align: center; color: var(--primary); margin-bottom: 20px; font-weight: bold; text-shadow: var(--text-glow); }
+        .cart-item { background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; }
+        .cart-item-info { display: flex; align-items: center; gap: 12px; }
+        .cart-item-img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; }
+        .qty-controls { display: flex; align-items: center; gap: 12px; }
+        .qty-btn { background: #2a2f3b; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold; }
+        .remove-item-btn { color: #ff4d4d; background: none; border: none; font-size: 20px; cursor: pointer; margin-left: 10px; }
+        .btn-confirm-order { background: #25D366; color: white; width: 100%; padding: 16px; font-size: 18px; font-weight: bold; border: none; border-radius: 12px; margin-top: 20px; cursor: pointer; }
+
+        /* Admin Dashboard */
+        .admin-box { background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: 20px auto; border: 1px solid var(--primary); }
+        .admin-menu { display: flex; gap: 5px; margin-bottom: 20px; }
+        .admin-menu button { flex: 1; padding: 10px 5px; background: #232836; color: white; border: 1px solid #3b4254; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 12px; }
+        .admin-menu button.active { background: var(--primary); color: #000; }
+        .admin-sub-page { display: none; }
+        .admin-sub-page.active { display: block; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; }
+        .form-group input, .form-group textarea { width: 100%; padding: 11px; background: #0a0c10; border: 1px solid #232836; color: white; border-radius: 8px; }
+        .admin-msg-card { background: #1f232e; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary); cursor: pointer; }
+        .admin-del-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1f232e; margin-bottom: 8px; border-radius: 8px; }
+
+        /* Modals */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background: var(--card-bg); padding: 25px; border-radius: 15px; max-width: 400px; width: 100%; border: 1px solid var(--primary); position: relative; }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 22px; cursor: pointer; color: #ff4d4d; }
+    </style>
+</head>
+<body>
+
+    <div id="intro-overlay">
+        <div class="intro-cube"></div>
+        <div class="intro-text">LOADING SHOP...</div>
+    </div>
+
+    <div class="floating-support-widget" id="floatingChatIcon" onclick="openUserChat()">
+        <i class="fas fa-comments text-glow"></i>
+        <span class="float-badge" id="float-badge-count" style="right: -4px; top: -6px;">1</span>
+    </div>
+
+    <header id="main-header">
+        <div class="header-top">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBar" placeholder="Search products..." onkeyup="checkSearch(this.value)">
+            </div>
+        </div>
+        <div class="glowing-title">Screen care products</div>
+    </header>
+
+    <div id="page-home" class="page active">
+        <div class="product-grid" id="home-product-grid"></div>
+    </div>
+
+    <div id="page-product" class="page">
+        <div class="product-grid" id="all-product-grid"></div>
+    </div>
+
+    <div id="page-cart" class="page">
+        <div class="cart-total-header">Total Amount: ৳<span id="cart-total-price">0</span></div>
+        <div id="cart-items-container"></div>
+        <button class="btn-confirm-order" onclick="confirmOrder()"><i class="fab fa-whatsapp"></i> Order Confirmed</button>
+    </div>
+
+    <div id="page-support" class="page">
+        <div class="support-container">
+            <a href="https://wa.me/+8801315425960" target="_blank" class="support-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://t.me/tamimislam31" target="_blank" class="support-btn btn-telegram"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            
+            <button class="support-btn btn-livechat" onclick="openUserChat()">
+                <i class="fas fa-comments"></i> Live Chat
+                <span class="support-badge" id="livechat-badge-count" style="right:10px; top:-5px;">1</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="messenger-wrap" id="user-messenger" style="display: none;">
+        <div class="messenger-header">
+            <h3><i class="fas fa-circle" style="color:#25D366; font-size:12px;"></i> Support Live Chat</h3>
+            <button onclick="closeUserChat()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="messenger-body" id="user-chat-body"></div>
+        <div class="messenger-footer">
+            <input type="text" id="user-msg-input" placeholder="Type your message here...">
+            <button class="btn-send-msg" onclick="userSendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <div id="page-account" class="page">
+        <button id="addrBtn" class="btn-address addr-red" onclick="openAddressModal()">Set Your Address</button>
+        
+        <div class="modal" id="addressModal">
+            <div class="modal-content">
+                <span class="close-modal" onclick="closeAddressModal()">&times;</span>
+                <h3>Delivery Address Setup</h3><br>
+                <div class="form-group"><label>Name:</label><input type="text" id="addr-name"></div>
+                <div class="form-group"><label>Number:</label><input type="text" id="addr-phone"></div>
+                <div class="form-group"><label>All Address:</label><textarea id="addr-text"></textarea></div>
+                <button class="btn-add-cart" onclick="saveAddressData()">Save Address</button>
+            </div>
+        </div>
+
+        <h3 style="margin:15px 0; color:var(--primary);">Available Screen Protectors:</h3>
+        <div class="product-grid" id="account-product-grid"></div>
+
+        <div class="admin-box" id="admin-login-sec" style="display:none; margin-top:30px;">
+            <h2>Admin Login Panel</h2><br>
+            <div class="form-group">
+                <label>Enter Admin Password:</label>
+                <input type="password" id="admin-password" placeholder="Password Here">
+            </div>
+            <button class="btn-add-cart" onclick="verifyAdmin()">Login</button>
+        </div>
+
+        <div class="admin-box" id="admin-dashboard-sec" style="display:none; margin-top:30px;">
+            <h2>Admin Control Panel</h2><br>
+            <div class="admin-menu">
+                <button onclick="switchAdminTab('ad-post')" id="tab-ad-post" class="active">Ad Post</button>
+                <button onclick="switchAdminTab('live-msg')" id="tab-live-msg">Live Message</button>
+                <button onclick="switchAdminTab('delete-post')" id="tab-delete-post">Delete Post</button>
+            </div>
+
+            <div id="admin-ad-post" class="admin-sub-page active">
+                <div class="form-group"><label>Product Image URL:</label><input type="text" id="p-img"></div>
+                <div class="form-group"><label>Product Name:</label><input type="text" id="p-name"></div>
+                <div class="form-group"><label>Price (৳):</label><input type="number" id="p-price"></div>
+                <div class="form-group"><label>Details:</label><textarea id="p-details"></textarea></div>
+                <button class="btn-add-cart" onclick="addNewProduct()">Upload Product</button>
+            </div>
+
+            <div id="admin-live-msg" class="admin-sub-page">
+                <div id="admin-threads-list">Loading inbox list...</div>
+            </div>
+
+            <div id="admin-delete-post" class="admin-sub-page">
+                <div id="admin-delete-list">Loading list...</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="messenger-wrap" id="admin-messenger" style="display: none;">
+        <div class="messenger-header">
+            <h3>Responding to User Live Chat</h3>
+            <button onclick="closeAdminChat()" style="background:none; border:none; color:white; font-size:20px; cursor:pointer;"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="messenger-body" id="admin-chat-body"></div>
+        <div class="messenger-footer">
+            <input type="text" id="admin-msg-input" placeholder="Type reply message...">
+            <button class="btn-send-msg" onclick="adminSendMessage()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="navigateTo('home')"><i class="fas fa-home"></i>HOME</div>
+        <div class="nav-item" onclick="navigateTo('product')"><i class="fas fa-th-large"></i>PRODUCT</div>
+        <div class="nav-item" onclick="navigateTo('cart')"><i class="fas fa-shopping-cart"></i>CART<span class="cart-badge" id="cart-badge-count">0</span></div>
+        <div class="nav-item" onclick="navigateTo('support')"><i class="fas fa-headset"></i>SUPPORT<span class="support-badge" id="nav-support-badge">1</span></div>
+        <div class="nav-item" onclick="navigateTo('account')"><i class="fas fa-user-shield"></i>ACCOUNT</div>
+    </nav>
+
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" style="color:var(--primary)">Product Name</h2><br>
+            <img id="modal-img" src="" style="width:100%; height:180px; object-fit:cover; border-radius:10px; margin-bottom:15px;">
+            <p id="modal-desc">Details text...</p><br>
+            <p id="modal-price" style="font-weight:bold; color:var(--primary); font-size:18px;"></p>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Initialization
+        const SUPABASE_URL = "https://rwxpdcmbryhthqjutymq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3eHBkY21icnlodGhxanV0eW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTk0MzQsImV4cCI6MjA5NDU5NTQzNH0.b_Pox9FK1Gl7xje6lrvWzHcdWWtUtTNnP6OI1pxco9s";
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+        let products = [];
+        let cart = [];
+        let userId = localStorage.getItem('chat_session_id') || 'user_' + Math.random().toString(36).substr(2, 9);
+        localStorage.setItem('chat_session_id', userId);
+
+        let activeAdminUserId = null; 
+
+        // Launch & Setup
+        window.addEventListener('DOMContentLoaded', async () => {
+            setTimeout(() => {
+                const intro = document.getElementById('intro-overlay');
+                intro.style.opacity = '0';
+                setTimeout(() => intro.style.visibility = 'hidden', 1000);
+            }, 2500);
+            
+            checkLocalAddress();
+            await fetchProducts();
+            hideInitialBadges();
+            listenRealtimeMessages();
+        });
+
+        // Hide notification badges initially
+        function hideInitialBadges() {
+            document.getElementById('livechat-badge-count').style.display = 'none';
+            document.getElementById('nav-support-badge').style.display = 'none';
+            document.getElementById('float-badge-count').style.display = 'none';
+        }
+
+        // Fetch Live DB Products
+        async function fetchProducts() {
+            let { data, error } = await _supabase.from('products').select('*').order('created_at', { ascending: false });
+            if (!error && data) {
+                products = data;
+                renderProducts();
+            }
+        }
+
+        // Check Local Storage Address Status
+        function checkLocalAddress() {
+            let addr = localStorage.getItem('user_delivery_address');
+            const btn = document.getElementById('addrBtn');
+            if(addr) {
+                btn.className = "btn-address addr-green";
+                btn.innerText = "Address Set Successfully (Active)";
+            } else {
+                btn.className = "btn-address addr-red";
+                btn.innerText = "Address Not Set! Click Here to Set";
+            }
+        }
+
+        function openAddressModal() { document.getElementById('addressModal').style.display = 'flex'; }
+        function closeAddressModal() { document.getElementById('addressModal').style.display = 'none'; }
+
+        function saveAddressData() {
+            let name = document.getElementById('addr-name').value;
+            let phone = document.getElementById('addr-phone').value;
+            let text = document.getElementById('addr-text').value;
+
+            if(!name || !phone || !text) return alert("সবগুলো ঘর পূরণ করুন!");
+
+            let info = { name, phone, text };
+            localStorage.setItem('user_delivery_address', JSON.stringify(info));
+            closeAddressModal();
+            checkLocalAddress();
+            alert("আপনার এড্রেস সেভ হয়েছে!");
+        }
+
+        // Navigation Controller
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if(item.innerText.toLowerCase().includes(pageId)) item.classList.add('active');
+            });
+
+            const header = document.getElementById('main-header');
+            if(pageId === 'home') { header.style.display = 'block'; } else { header.style.display = 'none'; }
+
+            if(pageId === 'cart') renderCart();
+            if(pageId === 'account') {
+                document.getElementById('admin-login-sec').style.display = 'none'; 
+                renderAdminDeleteList();
+            }
+        }
+
+        // Render Product Lists 
+        function renderProducts(filtered = products) {
+            const homeGrid = document.getElementById('home-product-grid');
+            const allGrid = document.getElementById('all-product-grid');
+            const accountGrid = document.getElementById('account-product-grid');
+            
+            let html = '';
+            filtered.forEach(prod => {
+                html += `
+                    <div class="product-card">
+                        <img src="${prod.img}" class="product-img">
+                        <div class="product-name">${prod.name}</div>
+                        <div class="product-price">৳${prod.price}</div>
+                        <button class="btn-add-cart" onclick="addToCart(${prod.id})">Add To Cart</button>
+                        <button class="btn-details" onclick="viewDetails(${prod.id})">details</button>
+                    </div>
+                `;
+            });
+            
+            homeGrid.innerHTML = html || '<p>No Products Found</p>';
+            allGrid.innerHTML = html || '<p>No Products Found</p>';
+            accountGrid.innerHTML = html || '<p>No Products Found</p>'; 
+        }
+
+        function checkSearch(val) {
+            if(val.toLowerCase().trim() === 'admin') {
+                navigateTo('account');
+                document.getElementById('admin-login-sec').style.display = 'block';
+                document.getElementById('searchBar').value = '';
+                return;
+            }
+            let filtered = products.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
+            renderProducts(filtered);
+        }
+
+        // Add To Cart System
+        function addToCart(id) {
+            let item = cart.find(p => p.id === id);
+            if(item) { item.qty++; } else {
+                let prod = products.find(p => p.id === id);
+                cart.push({...prod, qty: 1});
+            }
+            updateCartBadge();
+            document.getElementById('cart-badge-count').style.display = 'block';
+        }
+
+        function updateCartBadge() {
+            let totalQty = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            document.getElementById('cart-badge-count').innerText = totalQty;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            let total = 0; let html = '';
+            cart.forEach(item => {
+                total += (item.price * item.qty);
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <img src="${item.img}" class="cart-item-img">
+                            <div>
+                                <h4>${item.name}</h4>
+                                <p style="color:var(--primary)">৳${item.price} x ${item.qty}</p>
+                            </div>
+                        </div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                            <button class="remove-item-btn" onclick="removeFromCart(${item.id})"><i class="fas fa-times-circle"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html || '<p style="text-align:center;">Your cart is empty.</p>';
+            document.getElementById('cart-total-price').innerText = total;
+        }
+
+        function changeQty(id, change) {
+            let item = cart.find(p => p.id === id);
+            if(item) { item.qty += change; if(item.qty <= 0) { removeFromCart(id); return; } }
+            renderCart(); updateCartBadge();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(p => p.id !== id);
+            renderCart(); updateCartBadge();
+        }
+
+        // WhatsApp Order Submit (With Delivery Address System Integration)
+        function confirmOrder() {
+            if(cart.length === 0) return alert("Your cart is empty!");
+            let addrStr = localStorage.getItem('user_delivery_address');
+            let addrInfo = addrStr ? JSON.parse(addrStr) : null;
+            
+            let msg = "New Order Recieved:\n-------------------------\n";
+            let total = 0;
+            cart.forEach((item, i) => { 
+                msg += `${i+1}. ${item.name} (Qty: ${item.qty}) - ৳${item.price * item.qty}\n`; 
+                total += (item.price * item.qty);
+            });
+            
+            msg += `-------------------------\nTotal Payable: ৳${total}\n`;
+
+            if(addrInfo) {
+                msg += `\n🚚 Delivery Address:\n• Name: ${addrInfo.name}\n• Phone: ${addrInfo.phone}\n• Address: ${addrInfo.text}`;
+            } else {
+                msg += `\n⚠️ Delivery Address: Not Set By Customer`;
+            }
+            window.open(`https://wa.me/+8801315425960?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Live Messenger Engine (User Side)
+        async function openUserChat() {
+            document.getElementById('user-messenger').style.display = 'flex';
+            
+            // সব জায়গা থেকে লাল নোটিফিকেশন ব্যাজ হাইড হবে
+            document.getElementById('livechat-badge-count').style.display = 'none';
+            document.getElementById('nav-support-badge').style.display = 'none';
+            document.getElementById('float-badge-count').style.display = 'none';
+
+            // Check if thread started, if not, trigger welcome auto message
+            let { data } = await _supabase.from('messages').select('*').eq('sender_id', 'admin_system').eq('recipient_id', userId);
+            if(!data || data.length === 0) {
+                await _supabase.from('messages').insert([
+                    { sender_id: 'admin_system', recipient_id: userId, text: "স্যার আপনাকে কীভাবে সহযোগিতা করতে পারি।" }
+                ]);
+            }
+            fetchLiveChatMessages();
+        }
+
+        function closeUserChat() { document.getElementById('user-messenger').style.display = 'none'; }
+
+        async function fetchLiveChatMessages() {
+            let { data } = await _supabase.from('messages')
+                .select('*')
+                .or(`sender_id.eq.${userId},recipient_id.eq.${userId},and(sender_id.eq.admin_system,recipient_id.eq.${userId})`)
+                .order('created_at', { ascending: true });
+                
+            const body = document.getElementById('user-chat-body');
+            body.innerHTML = '';
+            if(data) {
+                data.forEach(m => {
+                    let side = (m.sender_id === userId) ? 'msg-right' : 'msg-left';
+                    body.innerHTML += `<div class="msg-bubble ${side}">${m.text}</div>`;
+                });
+                body.scrollTop = body.scrollHeight;
+            }
+        }
+
+        async function userSendMessage() {
+            let input = document.getElementById('user-msg-input');
+            let txt = input.value.trim();
+            if(!txt) return;
+
+            await _supabase.from('messages').insert([{ sender_id: userId, recipient_id: 'admin', text: txt }]);
+            input.value = '';
+            fetchLiveChatMessages();
+        }
+
+        // Realtime Listener Connection
+        function listenRealtimeMessages() {
+            _supabase.channel('custom-all-channel')
+            .on('postgres_changes', { event: 'INSERT', filter: 'table=eq.messages' }, payload => {
+                // যখন এডমিন ইউজারকে মেসেজ পাঠাবে
+                if(payload.new.recipient_id === userId) {
+                    if(document.getElementById('user-messenger').style.display === 'flex') {
+                        fetchLiveChatMessages();
+                    } else {
+                        // ৩টি জায়গায় একসাথে লাল রঙের ১ নোটিফিকেশন শো করবে
+                        document.getElementById('livechat-badge-count').innerText = "1";
+                        document.getElementById('nav-support-badge').innerText = "1";
+                        document.getElementById('float-badge-count').innerText = "1";
+                        
+                        document.getElementById('livechat-badge-count').style.display = 'block';
+                        document.getElementById('nav-support-badge').style.display = 'block';
+                        document.getElementById('float-badge-count').style.display = 'block';
+                    }
+                }
+                // যখন ইউজার এডমিনকে মেসেজ পাঠাবে
+                if(payload.new.recipient_id === 'admin' && document.getElementById('admin-dashboard-sec').style.display === 'block') {
+                    renderAdminMessagesInbox();
+                    if(activeAdminUserId === payload.new.sender_id) fetchAdminChatMessages();
+                }
+            })
+            .subscribe();
+        }
+
+        // Admin Engine Dashboard Controls
+        function verifyAdmin() {
+            let pass = document.getElementById('admin-password').value;
+            if(pass === 't') {
+                document.getElementById('admin-login-sec').style.display = 'none';
+                document.getElementById('admin-dashboard-sec').style.display = 'block';
+                renderAdminMessagesInbox();
+                renderAdminDeleteList();
+            } else { alert("Wrong Password!"); }
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-sub-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.admin-menu button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`admin-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            if(tabId === 'live-msg') renderAdminMessagesInbox();
+        }
+
+        async function addNewProduct() {
+            let img = document.getElementById('p-img').value;
+            let name = document.getElementById('p-name').value;
+            let price = parseInt(document.getElementById('p-price').value);
+            let desc = document.getElementById('p-details').value;
+            if(!name || !price) return alert("Fill data!");
+
+            await _supabase.from('products').insert([{ name, price, img, desc }]);
+            alert("Uploaded!");
+            await fetchProducts();
+            renderAdminDeleteList();
+        }
+
+        // Inbox Loader for Admin
+        async function renderAdminMessagesInbox() {
+            let { data } = await _supabase.from('messages').select('*').neq('sender_id', 'admin').order('created_at', { ascending: false });
+            const box = document.getElementById('admin-threads-list');
+            box.innerHTML = '';
+            
+            let uniqueUsers = [];
+            if(data) {
+                data.forEach(m => {
+                    let uid = m.sender_id === 'admin_system' ? m.recipient_id : m.sender_id;
+                    if(!uniqueUsers.includes(uid)) {
+                        uniqueUsers.push(uid);
+                        box.innerHTML += `
+                            <div class="admin-msg-card" onclick="openAdminChatScreen('${uid}')">
+                                <p><strong>User Session ID:</strong> ${uid}</p>
+                                <small>Last message: ${m.text}</small>
+                            </div>
+                        `;
+                    }
+                });
+            }
+            if(uniqueUsers.length === 0) box.innerHTML = "No live message threads found.";
+        }
+
+        // Open Selected Admin Chat Modal Window
+        function openAdminChatScreen(targetUid) {
+            activeAdminUserId = targetUid;
+            document.getElementById('admin-messenger').style.display = 'flex';
+            fetchAdminChatMessages();
+        }
+        function closeAdminChat() { document.getElementById('admin-messenger').style.display = 'none'; activeAdminUserId = null; }
+
+        async function fetchAdminChatMessages() {
+            if(!activeAdminUserId) return;
+            let { data } = await _supabase.from('messages')
+                .select('*')
+                .or(`sender_id.eq.${activeAdminUserId},recipient_id.eq.${activeAdminUserId},and(sender_id.eq.admin_system,recipient_id.eq.${activeAdminUserId})`)
+                .order('created_at', { ascending: true });
+                
+            const body = document.getElementById('admin-chat-body');
+            body.innerHTML = '';
+            if(data) {
+                data.forEach(m => {
+                    let side = (m.sender_id === 'admin') ? 'msg-right' : 'msg-left';
+                    body.innerHTML += `<div class="msg-bubble ${side}">${m.text}</div>`;
+                });
+                body.scrollTop = body.scrollHeight;
+            }
+        }
+
+        async function adminSendMessage() {
+            let input = document.getElementById('admin-msg-input');
+            let txt = input.value.trim();
+            if(!txt || !activeAdminUserId) return;
+
+            await _supabase.from('messages').insert([{ sender_id: 'admin', recipient_id: activeAdminUserId, text: txt }]);
+            input.value = '';
+            fetchAdminChatMessages();
+        }
+
+        function renderAdminDeleteList() {
+            const container = document.getElementById('admin-delete-list');
+            let html = '';
+            products.forEach(prod => {
+                html += `
+                    <div class="admin-del-item">
+                        <span>${prod.name} (৳${prod.price})</span>
+                        <button onclick="deleteProduct(${prod.id})" style="background:red; color:white; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">Delete</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html || 'No items available.';
+        }
+
+        async function deleteProduct(id) {
+            if(confirm("Delete this product?")) {
+                await _supabase.from('products').delete().eq('id', id);
+                await fetchProducts();
+                renderAdminDeleteList();
+            }
+        }
+
+        function viewDetails(id) {
+            let prod = products.find(p => p.id === id);
+            if(prod) {
+                document.getElementById('modal-title').innerText = prod.name;
+                document.getElementById('modal-img').src = prod.img;
+                document.getElementById('modal-desc').innerText = prod.desc || "No description.";
+                document.getElementById('modal-price').innerText = `Price: ৳${prod.price}`;
+                document.getElementById('detailsModal').style.display = 'flex';
+            }
+        }
+        function closeModal() { document.getElementById('detailsModal').style.display = 'none'; }
+    </script>
+</body>
+</html>
