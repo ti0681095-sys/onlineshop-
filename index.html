@@ -3,227 +3,735 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Online Market</title>
+    <title>Screen Care Shop</title>
+    <!-- FontAwesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Supabase JS Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #ffffff;
-            color: #333;
+        :root {
+            --primary: #00f2fe;
+            --secondary: #4facfe;
+            --bg-dark: #0a0c10;
+            --card-bg: #161920;
+            --text-glow: 0 0 10px rgba(0, 242, 254, 0.8), 0 0 20px rgba(0, 242, 254, 0.4);
         }
 
-        /* Top Bar */
-        .top-bar {
-            background: white;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-            padding: 12px 15px;
-            position: sticky;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: #fff;
+            overflow-x: hidden;
+            padding-bottom: 90px;
+        }
+
+        /* 1. Intro Animation */
+        #intro-overlay {
+            position: fixed;
             top: 0;
-            z-index: 100;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, #1a1c23 0%, #050508 100%);
+            z-index: 9999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1s ease, visibility 1s;
+        }
+        .intro-cube {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            animation: cubeAnim 2s infinite ease-in-out;
+            box-shadow: var(--text-glow);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        .intro-text {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 3px;
+            color: #fff;
+            text-shadow: var(--text-glow);
+        }
+        @keyframes cubeAnim {
+            0% { transform: rotate(0deg) scale(1); border-radius: 15px; }
+            50% { transform: rotate(180deg) scale(1.2); border-radius: 50%; filter: hue-rotate(180deg); }
+            100% { transform: rotate(360deg) scale(1); border-radius: 15px; }
+        }
+
+        /* Header Style */
+        header {
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(to bottom, rgba(22,25,32,0.9), transparent);
+        }
+        .header-top {
             display: flex;
             align-items: center;
             gap: 12px;
+            max-width: 600px;
+            margin: 0 auto 15px auto;
+            padding: 0 10px;
         }
-        .menu-btn { font-size: 34px; cursor: pointer; color: #333; }
-        .search-box { flex: 1; }
-        .search-box input {
+        .search-container {
+            flex: 1;
+        }
+        .search-box {
             width: 100%;
-            padding: 16px 20px;
-            border: 2px solid #ff6600;
-            border-radius: 50px;
-            font-size: 17px;
+            padding: 12px 20px;
+            border-radius: 25px;
+            border: 2px solid #2a2f3b;
+            background: #11141a;
+            color: #fff;
+            font-size: 16px;
             outline: none;
+            transition: 0.3s;
+        }
+        .search-box:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
+        }
+        .glowing-title {
+            font-size: 28px;
+            font-weight: 800;
+            color: #fff;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
+            animation: blinkGlow 1.2s infinite alternate ease-in-out;
+        }
+        @keyframes blinkGlow {
+            0% { text-shadow: 0 0 5px #00f2fe, 0 0 10px #00f2fe; opacity: 0.5; }
+            100% { text-shadow: 0 0 20px #00f2fe, 0 0 30px #4facfe; opacity: 1; }
         }
 
-        /* Online Market Header */
-        .header {
-            background: #ff6600;
-            color: white;
-            text-align: center;
-            padding: 18px 10px;
-            font-size: 26px;
-            font-weight: bold;
-            box-shadow: 0 4px 15px rgba(255,102,0,0.3);
-        }
-
-        /* Top Offer */
-        .top-offer {
+        /* Navigation Pages */
+        .page {
+            display: none;
             padding: 15px;
-            text-align: center;
+            animation: fadeIn 0.5s ease;
         }
-        .top-offer h2 { color: #ff6600; margin-bottom: 12px; }
+        .page.active {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
-        /* Product Grid */
-        .products {
-            padding: 15px;
-        }
+        /* Product Grid Layout */
         .product-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 15px;
+            max-width: 800px;
+            margin: 0 auto;
         }
         .product-card {
-            background: white;
+            background: var(--card-bg);
             border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-        .product-card img {
-            width: 100%;
-            height: 160px;
-            object-fit: cover;
-        }
-        .product-info {
             padding: 12px;
             text-align: center;
-        }
-        .product-info h3 { font-size: 15.5px; margin: 8px 0; }
-        .price { color: #ff6600; font-weight: bold; font-size: 17px; }
-
-        .btn-group {
+            border: 1px solid #232836;
             display: flex;
-            gap: 8px;
-            margin-top: 10px;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: transform 0.3s;
         }
-        .btn {
-            flex: 1;
-            padding: 10px;
+        .product-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+        }
+        .product-img {
+            width: 100%;
+            height: 130px;
+            object-fit: cover;
+            border-radius: 10px;
+            background: #2a2f3b;
+        }
+        .product-name {
+            font-size: 15px;
+            margin: 8px 0 4px 0;
+            color: #fff;
+            font-weight: 600;
+        }
+        .product-price {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 15px;
+            margin-bottom: 8px;
+        }
+        .btn-add-cart {
+            background: linear-gradient(135deg, var(--secondary), var(--primary));
+            color: #000;
+            font-weight: bold;
             border: none;
+            padding: 10px;
             border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
             font-size: 14px;
+        }
+        .btn-details {
+            color: #4facfe;
+            font-size: 12px;
+            background: none;
+            border: none;
+            margin-top: 8px;
+            text-decoration: underline;
             cursor: pointer;
         }
-        .btn-details { background: #f0f0f0; }
-        .btn-cart { background: #ff6600; color: white; }
 
-        /* Bottom Navigation */
+        /* Bottom Fixed Navigation Bar */
         .bottom-nav {
             position: fixed;
-            bottom: 0; left: 0; right: 0;
-            background: #ff6600;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 75px;
+            background: #11141a;
+            border-top: 2px solid #232836;
             display: flex;
             justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
-            z-index: 200;
+            align-items: center;
+            z-index: 1000;
         }
         .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #8e9aa8;
+            text-decoration: none;
+            font-size: 11px;
+            cursor: pointer;
+            position: relative;
+            flex: 1;
+        }
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+            transition: 0.3s;
+        }
+        .nav-item.active {
+            color: var(--primary);
+            text-shadow: var(--text-glow);
+        }
+        .nav-item.active i {
+            transform: translateY(-4px);
+        }
+        .cart-badge {
+            position: absolute;
+            top: -6px;
+            right: 22%;
+            background: red;
             color: white;
-            text-align: center;
-            font-size: 13px;
-            cursor: pointer;
+            font-size: 10px;
+            padding: 2px 7px;
+            border-radius: 50%;
+            font-weight: bold;
         }
-        .nav-item span { font-size: 26px; display: block; margin-bottom: 3px; }
 
-        /* Side Menu */
-        .side-menu {
-            position: fixed;
-            top: 0; left: -280px;
-            width: 280px; height: 100%;
-            background: white;
-            box-shadow: 3px 0 20px rgba(0,0,0,0.25);
-            transition: 0.4s;
-            z-index: 300;
-            padding: 20px;
+        /* Support Design */
+        .support-container {
+            max-width: 400px;
+            margin: 30px auto;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
         }
-        .side-menu.open { left: 0; }
-        .overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.5);
-            display: none;
-            z-index: 250;
-        }
-        .menu-item {
-            padding: 16px 10px;
-            font-size: 18px;
-            border-bottom: 1px solid #eee;
+        .support-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            padding: 15px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 16px;
+            color: #fff;
+            border: none;
             cursor: pointer;
         }
+        .btn-whatsapp { background: #25D366; }
+        .btn-telegram { background: #0088cc; }
+        .btn-webchat { background: linear-gradient(135deg, #f00699, #4facfe); }
+        
+        .chat-box {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+            border: 1px solid #232836;
+        }
+        .chat-box textarea {
+            width: 100%; height: 100px; background: #0a0c10; border: 1px solid #232836; color: #fff; padding: 10px; border-radius: 8px; resize: none; margin-bottom: 10px;
+        }
+
+        /* Cart Page Styling */
+        .cart-total-header {
+            font-size: 22px;
+            text-align: center;
+            color: var(--primary);
+            margin-bottom: 20px;
+            font-weight: bold;
+            text-shadow: var(--text-glow);
+        }
+        .cart-item {
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .cart-item-info { display: flex; align-items: center; gap: 12px; }
+        .cart-item-img { width: 55px; height: 55px; object-fit: cover; border-radius: 6px; }
+        .qty-controls { display: flex; align-items: center; gap: 12px; }
+        .qty-btn {
+            background: #2a2f3b; color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; font-weight: bold;
+        }
+        .remove-item-btn {
+            color: #ff4d4d; background: none; border: none; font-size: 20px; cursor: pointer; margin-left: 10px;
+        }
+        .btn-confirm-order {
+            background: #25D366; color: white; width: 100%; padding: 16px; font-size: 18px; font-weight: bold; border: none; border-radius: 12px; margin-top: 20px; cursor: pointer;
+        }
+
+        /* Admin Dashboard */
+        .admin-box {
+            background: var(--card-bg); padding: 20px; border-radius: 15px; max-width: 500px; margin: 20px auto; border: 1px solid var(--primary);
+        }
+        .admin-menu { display: flex; gap: 10px; margin-bottom: 20px; }
+        .admin-menu button {
+            flex: 1; padding: 12px; background: #232836; color: white; border: 1px solid #3b4254; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+        .admin-menu button.active { background: var(--primary); color: #000; }
+        .admin-sub-page { display: none; }
+        .admin-sub-page.active { display: block; }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; margin-bottom: 6px; font-size: 14px; }
+        .form-group input, .form-group textarea {
+            width: 100%; padding: 11px; background: #0a0c10; border: 1px solid #232836; color: white; border-radius: 8px;
+        }
+        .admin-msg-card {
+            background: #1f232e; padding: 15px; border-radius: 8px; margin-bottom: 10px; border-left: 4px solid var(--primary);
+        }
+        .admin-del-item {
+            display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #1f232e; margin-bottom: 8px; border-radius: 8px;
+        }
+
+        /* Details Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 2000; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-content {
+            background: var(--card-bg); padding: 25px; border-radius: 15px; max-width: 400px; width: 100%; border: 1px solid var(--primary); position: relative;
+        }
+        .close-modal { position: absolute; top: 10px; right: 15px; font-size: 22px; cursor: pointer; color: #ff4d4d; }
     </style>
 </head>
 <body>
 
-    <!-- Top Bar -->
-    <div class="top-bar">
-        <div class="menu-btn" onclick="toggleMenu()">☰</div>
-        <div class="search-box">
-            <input type="text" id="searchInput" placeholder="পণ্য খুঁজুন...">
+    <!-- 1. Intro Animation Overlay -->
+    <div id="intro-overlay">
+        <div class="intro-cube"></div>
+        <div class="intro-text">LOADING SHOP...</div>
+    </div>
+
+    <!-- Header Section (শুধুমাত্র HOME পেজে কানেক্টেড থাকবে) -->
+    <header id="main-header">
+        <div class="header-top">
+            <div class="search-container">
+                <input type="text" class="search-box" id="searchBar" placeholder="Search products..." onkeyup="checkSearch(this.value)">
+            </div>
+        </div>
+        <div class="glowing-title">Screen care products</div>
+    </header>
+
+    <!-- 2. HOME PAGE -->
+    <div id="page-home" class="page active">
+        <div class="product-grid" id="home-product-grid"></div>
+    </div>
+
+    <!-- 3. PRODUCT PAGE -->
+    <div id="page-product" class="page">
+        <div class="product-grid" id="all-product-grid"></div>
+    </div>
+
+    <!-- 4. CART PAGE -->
+    <div id="page-cart" class="page">
+        <div class="cart-total-header">Total Amount: ৳<span id="cart-total-price">0</span></div>
+        <div id="cart-items-container"></div>
+        <button class="btn-confirm-order" onclick="confirmOrder()"><i class="fab fa-whatsapp"></i> Order Confirmed</button>
+    </div>
+
+    <!-- 5. SUPPORT PAGE -->
+    <div id="page-support" class="page">
+        <div class="support-container">
+            <a href="https://wa.me/+8801315425960" target="_blank" class="support-btn btn-whatsapp"><i class="fab fa-whatsapp"></i> WhatsApp</a>
+            <a href="https://t.me/tamimislam31" target="_blank" class="support-btn btn-telegram"><i class="fab fa-telegram-plane"></i> Telegram</a>
+            <button class="support-btn btn-webchat" onclick="toggleWebChat()"><i class="fas fa-comments"></i> Send Message Website</button>
+
+            <div class="chat-box" id="web-chat-box" style="display: none;">
+                <h3>Send Support Message</h3><br>
+                <textarea id="support-msg-input" placeholder="Type your message here..."></textarea>
+                <button class="btn-add-cart" onclick="sendSupportMessage()">Submit Message</button>
+            </div>
         </div>
     </div>
 
-    <!-- Online Market -->
-    <div class="header">
-        ONLINE MARKET
+    <!-- 6. ADMIN / ACCOUNT PAGE -->
+    <div id="page-account" class="page">
+        <div class="admin-box" id="admin-login-sec">
+            <h2>Account Will be fixed</h2><br>
+            <div class="form-group">
+                <label>Enter account edit Password:</label>
+                <input type="password" id="admin-password" placeholder="Password Here">
+            </div>
+            <button class="btn-add-cart" onclick="verifyAdmin()">Login</button>
+        </div>
+
+        <div class="admin-box" id="admin-dashboard-sec" style="display:none;">
+            <h2>Admin Control Panel</h2><br>
+            <div class="admin-menu">
+                <button onclick="switchAdminTab('ad-post')" id="tab-ad-post" class="active">Ad Post</button>
+                <button onclick="switchAdminTab('view-msg')" id="tab-view-msg">View Msg</button>
+                <button onclick="switchAdminTab('delete-post')" id="tab-delete-post">Delete Post</button>
+            </div>
+
+            <div id="admin-ad-post" class="admin-sub-page active">
+                <div class="form-group"><label>Product Image URL:</label><input type="text" id="p-img" placeholder="https://image-link.com/pic.jpg"></div>
+                <div class="form-group"><label>Product Name:</label><input type="text" id="p-name"></div>
+                <div class="form-group"><label>Price (৳):</label><input type="number" id="p-price"></div>
+                <div class="form-group"><label>Details:</label><textarea id="p-details"></textarea></div>
+                <button class="btn-add-cart" onclick="addNewProduct()">Upload Product</button>
+            </div>
+
+            <div id="admin-view-msg" class="admin-sub-page">
+                <div id="admin-messages-list">Loading messages...</div>
+            </div>
+
+            <div id="admin-delete-post" class="admin-sub-page">
+                <div id="admin-delete-list">Loading list...</div>
+            </div>
+        </div>
     </div>
 
-    <!-- Top Offer -->
-    <div class="top-offer">
-        <h2>TOP OFFERS</h2>
-        <div id="topOffer">এখনো কোনো টপ অফার যোগ করা হয়নি</div>
-    </div>
+    <!-- Bottom Navigation Bar -->
+    <nav class="bottom-nav">
+        <div class="nav-item active" onclick="navigateTo('home')"><i class="fas fa-home"></i>HOME</div>
+        <div class="nav-item" onclick="navigateTo('product')"><i class="fas fa-th-large"></i>PRODUCT</div>
+        <div class="nav-item" onclick="navigateTo('cart')"><i class="fas fa-shopping-cart"></i>CART<span class="cart-badge" id="cart-badge-count">0</span></div>
+        <div class="nav-item" onclick="navigateTo('support')"><i class="fas fa-headset"></i>SUPPORT</div>
+        <div class="nav-item" onclick="navigateTo('account')"><i class="fas fa-user-shield"></i>ACCOUNT</div>
+    </nav>
 
-    <!-- Products -->
-    <div class="products">
-        <h2 style="margin-bottom:15px;">সকল প্রোডাক্ট</h2>
-        <div class="product-grid" id="productGrid"></div>
-    </div>
-
-    <!-- Bottom Navigation -->
-    <div class="bottom-nav">
-        <div class="nav-item" onclick="alert('Home')"><span>🏠</span>Home</div>
-        <div class="nav-item" onclick="alert('Cart')"><span>🛒</span>Cart</div>
-        <div class="nav-item" onclick="alert('Support')"><span>❓</span>Support</div>
-        <div class="nav-item" onclick="alert('Account')"><span>👤</span>Account</div>
-    </div>
-
-    <!-- Side Menu -->
-    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
-    <div class="side-menu" id="sideMenu">
-        <h2 style="color:#ff6600; margin-bottom:20px;">Menu</h2>
-        <div class="menu-item" onclick="toggleMenu()">🏠 HOME</div>
-        <div class="menu-item" onclick="toggleMenu()">🛒 CART</div>
-        <div class="menu-item" onclick="toggleMenu()">❓ SUPPORT</div>
-        <div class="menu-item" onclick="toggleMenu()">👤 ACCOUNT</div>
-        <div class="menu-item" onclick="toggleMenu()">📋 DETAILS</div>
-        
-        <button onclick="toggleMenu()" style="margin-top:30px; width:100%; padding:15px; background:#ff6600; color:white; border:none; border-radius:10px; font-size:17px;">
-            BACK
-        </button>
+    <!-- Details Modal -->
+    <div class="modal" id="detailsModal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title" style="color:var(--primary)">Product Name</h2><br>
+            <img id="modal-img" src="" style="width:100%; height:180px; object-fit:cover; border-radius:10px; margin-bottom:15px;">
+            <p id="modal-desc">Details text...</p><br>
+            <p id="modal-price" style="font-weight:bold; color:var(--primary); font-size:18px;"></p>
+        </div>
     </div>
 
     <script>
-        let products = [];
-        let topOffers = [];
+        // Supabase Initialization using your exact credentials
+        const SUPABASE_URL = "https://rwxpdcmbryhthqjutymq.supabase.co";
+        const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ3eHBkY21icnlodGhxanV0eW1xIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwMTk0MzQsImV4cCI6MjA5NDU5NTQzNH0.b_Pox9FK1Gl7xje6lrvWzHcdWWtUtTNnP6OI1pxco9s";
+        
+        const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Search for Admin
-        document.getElementById('searchInput').addEventListener('input', function() {
-            if (this.value.toLowerCase() === 'admin') {
-                this.value = '';
-                const pass = prompt("Enter Admin Password:");
-                if (pass === "tamim31") {
-                    alert("✅ এডমিন প্যানেল ওপেন হয়েছে!\n\nAd Product এবং Ad Top Offer Post চালু আছে।");
-                } else {
-                    alert("❌ ভুল পাসওয়ার্ড!");
-                }
-            }
+        let products = [];
+        let cart = [];
+
+        // Intro & App Start
+        window.addEventListener('DOMContentLoaded', async () => {
+            setTimeout(() => {
+                const intro = document.getElementById('intro-overlay');
+                intro.style.opacity = '0';
+                setTimeout(() => intro.style.visibility = 'hidden', 1000);
+            }, 2500);
+            
+            await fetchProducts();
         });
 
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('overlay');
-            menu.classList.toggle('open');
-            overlay.style.display = menu.classList.contains('open') ? 'block' : 'none';
+        // Fetch Products From Supabase DB
+        async function fetchProducts() {
+            let { data, error } = await _supabase.from('products').select('*').order('created_at', { ascending: false });
+            if (!error && data) {
+                products = data;
+                renderProducts();
+            }
         }
 
-        // Initial Render
-        window.onload = () => {
-            document.getElementById('productGrid').innerHTML = `
-                <div style="grid-column:1/-1; text-align:center; padding:50px; color:#777;">
-                    এখনো কোনো প্রোডাক্ট যোগ করা হয়নি
-                </div>`;
-        };
+        // Navigation Engine
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            
+            // Highlight current button
+            const navItems = document.querySelectorAll('.nav-item');
+            navItems.forEach(item => {
+                if(item.innerText.toLowerCase().includes(pageId)) item.classList.add('active');
+            });
+
+            const header = document.getElementById('main-header');
+            if(pageId === 'home') {
+                header.style.display = 'block';
+            } else {
+                header.style.display = 'none'; // Product পেজসহ অন্য পেজে সার্চ বক্স হাইড থাকবে
+            }
+
+            if(pageId === 'cart') renderCart();
+            if(pageId === 'account') { renderAdminDeleteList(); renderAdminMessages(); }
+        }
+
+        // Render Products
+        function renderProducts(filtered = products) {
+            const homeGrid = document.getElementById('home-product-grid');
+            const allGrid = document.getElementById('all-product-grid');
+            
+            let html = '';
+            filtered.forEach(prod => {
+                html += `
+                    <div class="product-card">
+                        <img src="${prod.img}" class="product-img">
+                        <div class="product-name">${prod.name}</div>
+                        <div class="product-price">৳${prod.price}</div>
+                        <button class="btn-add-cart" onclick="addToCart(${prod.id})">Add To Cart</button>
+                        <button class="btn-details" onclick="viewDetails(${prod.id})">details</button>
+                    </div>
+                `;
+            });
+            
+            homeGrid.innerHTML = html || '<p style="grid-column:1/3;">No Products Found</p>';
+            allGrid.innerHTML = html || '<p style="grid-column:1/3;">No Products Found</p>';
+        }
+
+        // Search Bar Handler
+        function checkSearch(val) {
+            if(val.toLowerCase().trim() === 'admin') {
+                navigateTo('account');
+                document.getElementById('searchBar').value = '';
+                return;
+            }
+            let filtered = products.filter(p => p.name.toLowerCase().includes(val.toLowerCase()));
+            renderProducts(filtered);
+        }
+
+        // Cart Actions
+        function addToCart(id) {
+            let item = cart.find(p => p.id === id);
+            if(item) {
+                item.qty++;
+            } else {
+                let prod = products.find(p => p.id === id);
+                cart.push({...prod, qty: 1});
+            }
+            updateCartBadge();
+        }
+
+        function updateCartBadge() {
+            let totalQty = cart.reduce((acc, curr) => acc + curr.qty, 0);
+            document.getElementById('cart-badge-count').innerText = totalQty;
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-items-container');
+            let total = 0;
+            let html = '';
+
+            cart.forEach(item => {
+                total += (item.price * item.qty);
+                html += `
+                    <div class="cart-item">
+                        <div class="cart-item-info">
+                            <img src="${item.img}" class="cart-item-img">
+                            <div>
+                                <h4>${item.name}</h4>
+                                <p style="color:var(--primary)">৳${item.price} x ${item.qty}</p>
+                            </div>
+                        </div>
+                        <div class="qty-controls">
+                            <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+                            <span>${item.qty}</span>
+                            <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
+                            <button class="remove-item-btn" onclick="removeFromCart(${item.id})"><i class="fas fa-times-circle"></i></button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html || '<p style="text-align:center; padding:20px; color:#8e9aa8;">Your cart is empty.</p>';
+            document.getElementById('cart-total-price').innerText = total;
+        }
+
+        function changeQty(id, change) {
+            let item = cart.find(p => p.id === id);
+            if(item) {
+                item.qty += change;
+                if(item.qty <= 0) { removeFromCart(id); return; }
+            }
+            renderCart();
+            updateCartBadge();
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(p => p.id !== id);
+            renderCart();
+            updateCartBadge();
+        }
+
+        // WhatsApp Order Submit
+        function confirmOrder() {
+            if(cart.length === 0) return alert("Your cart is empty!");
+            let msg = "New Order Recieved:\n-------------------------\n";
+            let total = 0;
+            
+            cart.forEach((item, i) => {
+                let sub = item.price * item.qty;
+                total += sub;
+                msg += `${i+1}. ${item.name}\n   Qty: ${item.qty} Pcs\n   Price: ৳${sub}\n\n`;
+            });
+
+            msg += `-------------------------\nTotal Payable: ৳${total}`;
+            window.open(`https://wa.me/+8801315425960?text=${encodeURIComponent(msg)}`, '_blank');
+        }
+
+        // Web Message Support System
+        function toggleWebChat() {
+            const box = document.getElementById('web-chat-box');
+            box.style.display = box.style.display === 'none' ? 'block' : 'none';
+        }
+
+        async function sendSupportMessage() {
+            let text = document.getElementById('support-msg-input').value;
+            if(!text.trim()) return alert("Please enter a message!");
+            
+            const { error } = await _supabase.from('messages').insert([{ text: text }]);
+            if(!error) {
+                alert("Message sent to Admin Panel successfully!");
+                document.getElementById('support-msg-input').value = '';
+                toggleWebChat();
+            } else {
+                alert("Error sending message. Check table rules.");
+            }
+        }
+
+        // Details Modal View
+        function viewDetails(id) {
+            let prod = products.find(p => p.id === id);
+            if(prod) {
+                document.getElementById('modal-title').innerText = prod.name;
+                document.getElementById('modal-img').src = prod.img;
+                document.getElementById('modal-desc').innerText = prod.desc || "No description available.";
+                document.getElementById('modal-price').innerText = `Price: ৳${prod.price}`;
+                document.getElementById('detailsModal').style.display = 'flex';
+            }
+        }
+        function closeModal() { document.getElementById('detailsModal').style.display = 'none'; }
+
+        // Admin Security Check
+        function verifyAdmin() {
+            let pass = document.getElementById('admin-password').value;
+            if(pass === 't') { // Password is 't'
+                document.getElementById('admin-login-sec').style.display = 'none';
+                document.getElementById('admin-dashboard-sec').style.display = 'block';
+                renderAdminMessages();
+                renderAdminDeleteList();
+            } else {
+                alert("Wrong Password!");
+            }
+        }
+
+        function switchAdminTab(tabId) {
+            document.querySelectorAll('.admin-sub-page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.admin-menu button').forEach(b => b.classList.remove('active'));
+            document.getElementById(`admin-${tabId}`).classList.add('active');
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+        }
+
+        // Create New Post In DB
+        async function addNewProduct() {
+            let img = document.getElementById('p-img').value || "https://images.unsplash.com/photo-1610945265064-0e34e5519bbf?w=400";
+            let name = document.getElementById('p-name').value;
+            let price = parseInt(document.getElementById('p-price').value);
+            let desc = document.getElementById('p-details').value;
+
+            if(!name || !price) return alert("Fill all fields correctly!");
+
+            const { error } = await _supabase.from('products').insert([{ name, price, img, desc }]);
+            if(!error) {
+                alert("Product Uploaded Perfectly!");
+                await fetchProducts();
+                renderAdminDeleteList();
+                document.getElementById('p-name').value = '';
+                document.getElementById('p-price').value = '';
+                document.getElementById('p-details').value = '';
+            }
+        }
+
+        // View Live Messages on Admin Panel
+        async function renderAdminMessages() {
+            const container = document.getElementById('admin-messages-list');
+            let { data, error } = await _supabase.from('messages').select('*').order('created_at', { ascending: false });
+            
+            if(!error && data) {
+                let html = '';
+                data.forEach((msg, idx) => {
+                    html += `
+                        <div class="admin-msg-card">
+                            <p><strong>Msg ${idx+1}:</strong> ${msg.text}</p>
+                            <button class="btn-add-cart" style="padding:4px 10px; font-size:12px; width:auto; margin-top:8px;" onclick="window.open('https://wa.me/+8801315425960', '_blank')">Reply User</button>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html || 'No messages found.';
+            }
+        }
+
+        // Live Delete Post List
+        function renderAdminDeleteList() {
+            const container = document.getElementById('admin-delete-list');
+            let html = '';
+            products.forEach(prod => {
+                html += `
+                    <div class="admin-del-item">
+                        <span>${prod.name} (৳${prod.price})</span>
+                        <button onclick="deleteProduct(${prod.id})" style="background:red; color:white; border:none; padding:6px 12px; border-radius:5px; cursor:pointer;">Delete</button>
+                    </div>
+                `;
+            });
+            container.innerHTML = html || 'No products available.';
+        }
+
+        // Delete Request Execution
+        async function deleteProduct(id) {
+            if(confirm("Are you sure you want to delete this product?")) {
+                const { error } = await _supabase.from('products').delete().eq('id', id);
+                if(!error) {
+                    alert("Product Deleted!");
+                    await fetchProducts();
+                    renderAdminDeleteList();
+                }
+            }
+        }
     </script>
 </body>
 </html>
