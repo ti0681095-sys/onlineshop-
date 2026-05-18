@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -566,7 +563,7 @@
             let { data } = await _supabase.from('messages').select('*').eq('sender_id', 'admin_system').eq('recipient_id', userId);
             if(!data || data.length === 0) {
                 await _supabase.from('messages').insert([
-                    { sender_id: 'admin_system', recipient_id: userId, text: "স্যার আপনাকে কীভাবে সহযোগিতা করতে পারি।" }
+                    { sender_id: 'admin_system', recipient_id: userId, text: "স্যার আপনাকে কীভাবে সহযোগিতা করতে পারি?" }
                 ]);
             }
             fetchLiveChatMessages();
